@@ -103,9 +103,11 @@ void Game::Setup(void)
     game_objects_.push_back(new GameObject(glm::vec3(1.0f, -0.5f, 0.0f), tex_[2], size_));
 
     // Setup background
-    GameObject *background = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[3], size_);
-    background->SetScale(10.0);
-    game_objects_.push_back(background);
+    for (int i = 0; i < 50; i++) {
+        GameObject* background = new GameObject(glm::vec3(0.0f, i, 0.0f), tex_[3], size_);
+        background->SetScale(10.0);
+        game_objects_.push_back(background);
+    }
 }
 
 
@@ -124,7 +126,9 @@ void Game::MainLoop(void)
 
         // Set view to zoom out, centered by default at 0,0
         float cameraZoom = 0.25f;
+        GameObject* player = game_objects_[0];
         glm::mat4 view_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(cameraZoom, cameraZoom, cameraZoom));
+        view_matrix = glm::translate(view_matrix, -glm::vec3(0, player->GetPosition()[1], 0));
         shader_.SetUniformMat4("view_matrix", view_matrix);
 
         // Calculate delta time
@@ -233,19 +237,39 @@ void Game::Controls(void)
     // Get player game object
     GameObject *player = game_objects_[0];
     glm::vec3 curpos = player->GetPosition();
+    glm::vec3 curvel = player->GetVelocity();
+    glm::vec3 newPos;
 
     // Check for player input and make changes accordingly
     if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS) {
-        player->SetPosition(curpos + glm::vec3(0, 0.001, 0));
+        if (glm::length(curvel) < 5) {
+            player->SetVelocity(curvel + glm::vec3(0.0f,0.05f,0.0f));
+        }
     }
     if (glfwGetKey(window_, GLFW_KEY_S) == GLFW_PRESS) {
-        player->SetPosition(curpos + glm::vec3(0, -0.001, 0));
+        if (glm::length(curvel) > 0.5) {
+            player->SetVelocity(curvel + glm::vec3(0.0f, -0.05f, 0.0f));
+        }
     }
     if (glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS) {
-        player->SetPosition(curpos + glm::vec3(0.001, 0, 0));
+        newPos = curpos + glm::vec3(0.03, 0, 0);
+        if (newPos[0] > 3.5) {
+            newPos[0] = 3.5;
+        }
+        player->SetPosition(newPos);
     }
     if (glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS) {
-        player->SetPosition(curpos + glm::vec3(-0.001, 0, 0));
+        newPos = curpos + glm::vec3(-0.03, 0, 0);
+        if (newPos[0] < -3.5) {
+            newPos[0] = -3.5;
+        }
+        player->SetPosition(newPos);
+    }
+    if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        //fire bullet
+    }
+    if (glfwGetKey(window_, GLFW_KEY_E) == GLFW_PRESS) {
+        //switch wepond mode
     }
     if (glfwGetKey(window_, GLFW_KEY_Q) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window_, true);
