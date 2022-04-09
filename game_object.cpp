@@ -4,7 +4,7 @@
 
 namespace game {
 
-GameObject::GameObject(const glm::vec3 &position, GLuint texture, GLint num_elements) 
+GameObject::GameObject(const glm::vec3 &position, GLuint texture, GLint num_elements, std::string tag)
 {
 
     // Initialize all attributes
@@ -12,7 +12,10 @@ GameObject::GameObject(const glm::vec3 &position, GLuint texture, GLint num_elem
     scale_ = 1.0;
     velocity_ = glm::vec3(0.0f, 0.0f, 0.0f); // Starts out stationary
     num_elements_ = num_elements;
+    tag_ = tag;
     texture_ = texture;
+    radius_ = 0.5;
+
 }
 
 

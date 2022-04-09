@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #define GLEW_STATIC
 #include <GL/glew.h>
+#include <string>
 
 #include "shader.h"
 
@@ -17,7 +18,7 @@ namespace game {
 
         public:
             // Constructor
-            GameObject(const glm::vec3 &position, GLuint texture, GLint num_elements);
+            GameObject(const glm::vec3 &position, GLuint texture, GLint num_elements, std::string tag);
 
             // Update the GameObject's state. Can be overriden for children
             virtual void Update(double delta_time);
@@ -29,10 +30,13 @@ namespace game {
             inline glm::vec3& GetPosition(void) { return position_; }
             inline float GetScale(void) { return scale_; }
             inline glm::vec3& GetVelocity(void) { return velocity_; }
+            inline float GetRadius(void) { return radius_; }
+            inline std::string GetTag(void) { return tag_; }
 
             // Setters
             inline void SetPosition(const glm::vec3& position) { position_ = position; }
             inline void SetScale(float scale) { scale_ = scale; }
+            inline void SetRadius(float radius) { radius_ = radius; }
 
             inline void SetVelocity(const glm::vec3& velocity) { velocity_ = velocity; }
 
@@ -42,9 +46,11 @@ namespace game {
             glm::vec3 position_;
             float scale_; 
             glm::vec3 velocity_;
+            float radius_;
 
             // Object's details
             GLint num_elements_;
+            std::string tag_;
 
             // Object's texture reference
             GLuint texture_;

@@ -96,15 +96,15 @@ void Game::Setup(void)
 
     // Setup the player object (position, texture, vertex count)
     // Note that, in this specific implementation, the player object should always be the first object in the game object vector 
-    game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_));
+    game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player"));
 
     // Setup other objects
-    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 1.0f, 0.0f), tex_[1], size_));
-    game_objects_.push_back(new GameObject(glm::vec3(1.0f, -0.5f, 0.0f), tex_[2], size_));
+    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 1.0f, 0.0f), tex_[1], size_, "plane"));
+    game_objects_.push_back(new GameObject(glm::vec3(1.0f, -0.5f, 0.0f), tex_[2], size_, "plane"));
 
     // Setup background
     for (int i = 0; i < 50; i++) {
-        GameObject* background = new GameObject(glm::vec3(0.0f, i, 0.0f), tex_[3], size_);
+        GameObject* background = new GameObject(glm::vec3(0.0f, i, 0.0f), tex_[3], size_, "ground");
         background->SetScale(10.0);
         game_objects_.push_back(background);
     }
@@ -282,6 +282,8 @@ void Game::Update(double delta_time)
 
     // Handle user input
     Controls();
+
+    CheckAllCollisions(game_objects_, delta_time);
 
     // Update and render all game objects
     for (int i = 0; i < game_objects_.size(); i++) {

@@ -2,6 +2,7 @@
 #define PLAYER_GAME_OBJECT_H_
 
 #include "game_object.h"
+#include <string>
 
 namespace game {
 
@@ -9,7 +10,7 @@ namespace game {
     class PlayerGameObject : public GameObject {
 
         public:
-            PlayerGameObject(const glm::vec3 &position, GLuint texture, GLint num_elements);
+            PlayerGameObject(const glm::vec3 &position, GLuint texture, GLint num_elements, std::string tag);
 
             // Update function for moving the player object around
             void Update(double delta_time) override;

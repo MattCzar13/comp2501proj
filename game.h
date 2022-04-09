@@ -8,6 +8,7 @@
 
 #include "shader.h"
 #include "game_object.h"
+#include "collision.h"
 
 namespace game {
 
