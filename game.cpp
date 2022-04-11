@@ -97,11 +97,17 @@ void Game::Setup(void)
     // Setup the player object (position, texture, vertex count)
     // Note that, in this specific implementation, the player object should always be the first object in the game object vector 
     game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player"));
-
+    //setup bullet
+    game_objects_.push_back(new GameObject(glm::vec3(100.0f, 0.0f, 0.0f), tex_[4], size_, "bullet"));
+    
     // Setup other objects
-    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 1.0f, 0.0f), tex_[1], size_, "plane"));
-    game_objects_.push_back(new GameObject(glm::vec3(1.0f, -0.5f, 0.0f), tex_[2], size_, "plane"));
+    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 10.0f, 0.0f), tex_[1], size_, "plane"));
+    game_objects_.push_back(new GameObject(glm::vec3(1.0f, 15.5f, 0.0f), tex_[2], size_, "plane"));
+    game_objects_.push_back(new GameObject(glm::vec3(2.0f, 8.0f, 0.0f), tex_[1], size_, "plane"));
+    game_objects_.push_back(new GameObject(glm::vec3(-2.0f, 25.5f, 0.0f), tex_[2], size_, "plane"));
 
+    
+    
     // Setup background
     for (int i = 0; i < 50; i++) {
         GameObject* background = new GameObject(glm::vec3(0.0f, i, 0.0f), tex_[3], size_, "ground");
@@ -128,7 +134,7 @@ void Game::MainLoop(void)
         float cameraZoom = 0.25f;
         GameObject* player = game_objects_[0];
         glm::mat4 view_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(cameraZoom, cameraZoom, cameraZoom));
-        view_matrix = glm::translate(view_matrix, -glm::vec3(0, player->GetPosition()[1], 0));
+        view_matrix = glm::translate(view_matrix, -glm::vec3(0, player->GetPosition()[1] + 2.2, 0));
         shader_.SetUniformMat4("view_matrix", view_matrix);
 
         // Calculate delta time
@@ -227,7 +233,11 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[0], (resources_directory_g+std::string("/textures/plane_blue.png")).c_str());
     SetTexture(tex_[1], (resources_directory_g+std::string("/textures/plane_red.png")).c_str());
     SetTexture(tex_[2], (resources_directory_g+std::string("/textures/plane_green.png")).c_str());
-    SetTexture(tex_[3], (resources_directory_g+std::string("/textures/dune.png")).c_str());
+    SetTexture(tex_[3], (resources_directory_g+std::string("/textures/Back.bmp")).c_str());
+    SetTexture(tex_[4], (resources_directory_g + std::string("/textures/bullet.png")).c_str());
+    SetTexture(tex_[5], (resources_directory_g + std::string("/textures/missile.png")).c_str());
+    
+
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
 }
 
@@ -242,7 +252,7 @@ void Game::Controls(void)
 
     // Check for player input and make changes accordingly
     if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS) {
-        if (glm::length(curvel) < 5) {
+        if (glm::length(curvel) < 3) {
             player->SetVelocity(curvel + glm::vec3(0.0f,0.05f,0.0f));
         }
     }
@@ -253,22 +263,36 @@ void Game::Controls(void)
     }
     if (glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS) {
         newPos = curpos + glm::vec3(0.03, 0, 0);
-        if (newPos[0] > 3.5) {
-            newPos[0] = 3.5;
+        if (newPos[0] > 2.5) {
+            newPos[0] = 2.5;
         }
         player->SetPosition(newPos);
     }
     if (glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS) {
         newPos = curpos + glm::vec3(-0.03, 0, 0);
-        if (newPos[0] < -3.5) {
-            newPos[0] = -3.5;
+        if (newPos[0] < -2.5) {
+            newPos[0] = -2.5;
         }
         player->SetPosition(newPos);
     }
     if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        if (!shoot) {
+            game_objects_[1]->SetPosition(game_objects_[0]->GetPosition());
+            shoot = true;
+        }
+        
+        shoot = true;
+
+        
         //fire bullet
     }
     if (glfwGetKey(window_, GLFW_KEY_E) == GLFW_PRESS) {
+        if (type_weapon == 1) {
+            type_weapon = 2;
+        }
+        else {
+            type_weapon = 1;
+        }
         //switch wepond mode
     }
     if (glfwGetKey(window_, GLFW_KEY_Q) == GLFW_PRESS) {
@@ -287,8 +311,41 @@ void Game::Update(double delta_time)
 
     // Update and render all game objects
     for (int i = 0; i < game_objects_.size(); i++) {
+
         // Get the current game object
         GameObject* current_game_object = game_objects_[i];
+
+        //set the position of bullet
+        if (current_game_object->GetTag() == "bullet" & shoot) {
+            if (current_game_object->GetTex() == tex_[4]) {
+                current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, 0.1, 0));
+                
+            }
+            else {
+                current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, 0.05, 0));
+                
+            }
+            float distance_b_p = glm::length(current_game_object->GetPosition() - game_objects_[0]->GetPosition());
+            if (distance_b_p > 7) {
+                shoot = false;
+                current_game_object->SetPosition(glm::vec3(100, 0, 0));
+            }
+            
+        }
+
+        //set the positon of enemy
+        if (current_game_object->GetTag() == "plane") {
+            float distance_p_p = glm::length(current_game_object->GetPosition() - game_objects_[0]->GetPosition());
+            if (distance_p_p < 9) {
+                current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, -0.01, 0));
+            }
+        }
+
+        //switch weapon
+        if (current_game_object->GetTag() == "bullet" & !shoot) {
+            current_game_object->SetTex(tex_[3+type_weapon]);
+        }
+        
 
         // Update the current game object
         current_game_object->Update(delta_time);
@@ -298,7 +355,9 @@ void Game::Update(double delta_time)
             GameObject* other_game_object = game_objects_[j];
 
             float distance = glm::length(current_game_object->GetPosition() - other_game_object->GetPosition());
-            if (distance < 0.1f) {
+            if (distance < 0.5f ) {
+               
+                
                 // This is where you would perform collision response between objects
             }
         }

@@ -40,8 +40,12 @@ namespace game {
             // Size of geometry to be rendered
             int size_;
 
+            //if shooting
+            bool shoot = false;
+            int type_weapon = 1;
+
             // References to textures
-#define NUM_TEXTURES 4
+#define NUM_TEXTURES 20
             GLuint tex_[NUM_TEXTURES];
 
             // List of game objects
