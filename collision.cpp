@@ -131,6 +131,7 @@ namespace game {
                 }
                 else if (collision_type == 2) {
                     collision = RayCircleCollision(current_game_object, other_game_object, delta_time);
+                    //printf("checked for ray circle colision\n");
                 }
                 else if (collision_type == 3) {
                     collision = RayCircleCollision(other_game_object, current_game_object, delta_time);
@@ -154,9 +155,17 @@ namespace game {
 
         if (tag1 == "player" && tag2 == "plane") {
             return 1;
-        }else if (tag1 == "plane" && tag2 == "player") {
+        }
+        else if (tag1 == "plane" && tag2 == "player") {
             return 1;
         }
+        else if (tag1 == "plane" && tag2 == "bullet") {
+            return 3;
+        }
+        else if (tag1 == "bullet" && tag2 == "plane") {
+            return 2;
+        }
+      
 
     }
 
@@ -170,6 +179,12 @@ namespace game {
         }
         else if (tag1 == "plane" && tag2 == "player") {
             printf("collision between plane and player\n");
+        }
+        else if (tag1 == "bullet" && tag2 == "plane") {
+            printf("collision between bullet and plane\n");
+        }
+        else if (tag1 == "plane" && tag2 == "bullet") {
+            printf("collision between plane and bullet\n");
         }
 
     }

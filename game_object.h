@@ -30,13 +30,16 @@ namespace game {
             inline glm::vec3& GetPosition(void) { return position_; }
             inline float GetScale(void) { return scale_; }
             inline glm::vec3& GetVelocity(void) { return velocity_; }
+            inline GLuint GetTex(void) { return  texture_; }
             inline float GetRadius(void) { return radius_; }
+            inline void SetTex(GLuint texture) { texture_ = texture; }
             inline std::string GetTag(void) { return tag_; }
 
             // Setters
             inline void SetPosition(const glm::vec3& position) { position_ = position; }
             inline void SetScale(float scale) { scale_ = scale; }
             inline void SetRadius(float radius) { radius_ = radius; }
+
 
             inline void SetVelocity(const glm::vec3& velocity) { velocity_ = velocity; }
 
