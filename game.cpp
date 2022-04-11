@@ -142,7 +142,7 @@ void Game::MainLoop(void)
         // Set view to zoom out, centered by default at 0,0
         glm::mat4 window_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f / aspect_ratio, 1.0f, 1.0f));
         glm::mat4 camera_zoom = glm::scale(glm::mat4(1.0f), glm::vec3(cameraZoom, cameraZoom, cameraZoom));
-        camera_zoom = glm::translate(camera_zoom, -glm::vec3(0, player->GetPosition()[1], 0));
+        camera_zoom = glm::translate(camera_zoom, -glm::vec3(0, player->GetPosition()[1]+2.0f, 0));
         glm::mat4 view_matrix = window_scale * camera_zoom;
         shader_.SetUniformMat4("view_matrix", view_matrix);
 
