@@ -318,11 +318,13 @@ void Game::Update(double delta_time)
         //set the position of bullet
         if (current_game_object->GetTag() == "bullet" & shoot) {
             if (current_game_object->GetTex() == tex_[4]) {
-                current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, 0.1, 0));
+                //current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, 0.1, 0));
+                current_game_object->SetVelocity(glm::vec3(0.0001, 10, 0));
                 
             }
             else {
-                current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, 0.05, 0));
+                //current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, 0.05, 0));
+                current_game_object->SetVelocity(glm::vec3(0.0001, 5, 0));
                 
             }
             float distance_b_p = glm::length(current_game_object->GetPosition() - game_objects_[0]->GetPosition());
