@@ -1,0 +1,10 @@
+# ninja log v5
+10	571	6714061272648055	CMakeFiles/GameDemo.dir/file_utils.cpp.obj	758516f4aac64ce1
+8	512	6714061272109500	CMakeFiles/GameDemo.dir/player_game_object.cpp.obj	d291199552ef4bbc
+18	682	6714061273854830	CMakeFiles/GameDemo.dir/shader.cpp.obj	9ddd4eac03c31c7d
+16	543	6714061272328921	CMakeFiles/GameDemo.dir/enemy_game_object.cpp.obj	4773717c553f03a
+0	588	6714061272927300	CMakeFiles/GameDemo.dir/game.cpp.obj	fed385c5ae9b2635
+6	681	6714061273854830	CMakeFiles/GameDemo.dir/main.cpp.obj	280045ef9f435d6
+3	544	6714061272438611	CMakeFiles/GameDemo.dir/game_object.cpp.obj	91620af8baf427e9
+13	554	6714061272578237	CMakeFiles/GameDemo.dir/collision.cpp.obj	fac4ef22b26a9a55
+0	630	6714062539793710	GameDemo_d.exe	3aa27112cde03a22
