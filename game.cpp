@@ -16,8 +16,8 @@ namespace game {
 
 // Globals that define the OpenGL window and viewport
 const char *window_title_g = "HERO OF SKY";
-const unsigned int window_width_g = 800;
-const unsigned int window_height_g = 600;
+const unsigned int window_width_g = 600;
+const unsigned int window_height_g = 800;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 1.0);
 
 // Directory with game resources such as textures
@@ -127,8 +127,17 @@ void Game::MainLoop(void)
         // Set view to zoom out, centered by default at 0,0
         float cameraZoom = 0.25f;
         GameObject* player = game_objects_[0];
-        glm::mat4 view_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(cameraZoom, cameraZoom, cameraZoom));
-        view_matrix = glm::translate(view_matrix, -glm::vec3(0, player->GetPosition()[1], 0));
+
+        // Use aspect ratio to properly scale the window
+        int width, height;
+        glfwGetWindowSize(window_, &width, &height);
+        float aspect_ratio = ((float)width) / ((float)height);
+
+        // Set view to zoom out, centered by default at 0,0
+        glm::mat4 window_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f / aspect_ratio, 1.0f, 1.0f));
+        glm::mat4 camera_zoom = glm::scale(glm::mat4(1.0f), glm::vec3(cameraZoom, cameraZoom, cameraZoom));
+        camera_zoom = glm::translate(camera_zoom, -glm::vec3(0, player->GetPosition()[1], 0));
+        glm::mat4 view_matrix = window_scale * camera_zoom;
         shader_.SetUniformMat4("view_matrix", view_matrix);
 
         // Calculate delta time
