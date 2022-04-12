@@ -104,7 +104,7 @@ void Game::Setup(void)
     for (int i = 0; i < 50; i++) {
         GameObject* background = new GameObject(glm::vec3(0.0f, i, 0.0f), tex_[3], size_, "ground");
         background->SetScale(10.0);
-        game_objects_.push_back(background);
+        bg_objects_.push_back(background);
     }
 }
 
@@ -304,7 +304,7 @@ void Game::Controls(void)
 void Game::HandleSpawning() {
 
     if (glfwGetTime() > spawnTimer_) {
-        spawnTimer_ += 2;
+        spawnTimer_ += 3;
 
         game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+1.0f, 0.0f), tex_[1], size_, "plane"));
         printf("[!] SPAWNED A NEW ENEMY PLANE\n");
@@ -323,7 +323,17 @@ void Game::Update(double delta_time)
 
     HandleSpawning();
 
-    // Update and render all game objects
+    // Main iteration
+
+    // [1] FOREGROUND FG_OBJECTS_ (Heads up display)
+
+    for (int i = 0; i < fg_objects_.size(); i++) {
+        GameObject* current_game_object = fg_objects_[i];
+
+        current_game_object->Render(shader_);
+    }
+
+    // [2] MIDDLEGROUND GAME_OBJECTS_ (Player objects, enemies, powerups, etc etc)
     for (int i = 0; i < game_objects_.size(); i++) {
 
         // Get the current game object
@@ -388,6 +398,14 @@ void Game::Update(double delta_time)
         // Render game object
         current_game_object->Render(shader_);
     }
+
+    // [3] BACKGROUND BG_OBJECTS_ (Background tiles, decorations behind players/enemies)
+    for (int i = 0; i < bg_objects_.size(); i++) {
+        GameObject* current_game_object = bg_objects_[i];
+
+        current_game_object->Render(shader_);
+    }
+
 }
        
 } // namespace game
