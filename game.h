@@ -45,7 +45,7 @@ namespace game {
             int type_weapon = 1;
 
             // References to textures
-#define NUM_TEXTURES 20
+#define NUM_TEXTURES 30
             GLuint tex_[NUM_TEXTURES];
 
             // List of game objects

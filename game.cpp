@@ -111,11 +111,24 @@ void Game::Setup(void)
     GameObject* hud = new GameObject(glm::vec3(0.0f, -1.0f, 0.0f), tex_[16], size_, "hud_bar");
     hud->SetScale(5.0f);
     fg_objects_.push_back(hud);
-    fg_objects_.push_back(new GameObject(glm::vec3(0.0f, -2.0f, 0.0f), tex_[17], size_, "hud_arrow"));
+    hud = new GameObject(glm::vec3(0.0f, -2.0f, 0.0f), tex_[17], size_, "hud_arrow");
+    hud->SetScale(0.5f);
+    fg_objects_.push_back(hud);
     
+    int texnumber = 3;
+
     // Setup background
-    for (int i = 0; i < 50; i++) {
-        GameObject* background = new GameObject(glm::vec3(0.0f, i * 10, 0.0f), tex_[3], size_, "ground");
+    for (int i = 0; i < 100; i++) {
+
+        if (i < 16) {
+            texnumber = 18;
+        }else if (i < 30) {
+            texnumber = 19;
+        }else{
+            texnumber = 20;
+        }
+
+        GameObject* background = new GameObject(glm::vec3(0.0f, i * 10, 0.0f), tex_[texnumber], size_, "ground");
         background->SetScale(10.0);
         bg_objects_.push_back(background);
     }
@@ -247,7 +260,7 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[0], (resources_directory_g+std::string("/textures/plane_blue.png")).c_str());
     SetTexture(tex_[1], (resources_directory_g+std::string("/textures/plane_red.png")).c_str());
     SetTexture(tex_[2], (resources_directory_g+std::string("/textures/plane_green.png")).c_str());
-    SetTexture(tex_[3], (resources_directory_g+std::string("/textures/Back.bmp")).c_str());
+    SetTexture(tex_[3], (resources_directory_g+std::string("/textures/bg1.png")).c_str());
     SetTexture(tex_[4], (resources_directory_g + std::string("/textures/bullet.png")).c_str());
     SetTexture(tex_[5], (resources_directory_g + std::string("/textures/missile.png")).c_str());
     SetTexture(tex_[6], (resources_directory_g + std::string("/textures/health.png")).c_str());
@@ -262,6 +275,9 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[15], (resources_directory_g + std::string("/textures/playerShield.png")).c_str());
     SetTexture(tex_[16], (resources_directory_g + std::string("/textures/progressbar.png")).c_str());
     SetTexture(tex_[17], (resources_directory_g + std::string("/textures/progressbar_arrow.png")).c_str());
+    SetTexture(tex_[18], (resources_directory_g + std::string("/textures/bg1.png")).c_str());
+    SetTexture(tex_[19], (resources_directory_g + std::string("/textures/bg2.png")).c_str());
+    SetTexture(tex_[20], (resources_directory_g + std::string("/textures/bg3.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
@@ -449,7 +465,11 @@ void Game::Update(double delta_time)
             current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 0.5, 0.0f));
         }
         if (current_game_object->GetTag() == "hud_arrow") {
-            current_game_object->SetPosition(glm::vec3((game_objects_[0]->GetPosition()[1] / 120) - 2.2, current_game_object->GetPosition()[1] - 1, 0.0f));
+            current_game_object->SetPosition(glm::vec3((game_objects_[0]->GetPosition()[1] / 100) - 2.2, current_game_object->GetPosition()[1] - 1.2, 0.0f));
+
+            if (current_game_object->GetPosition()[0] > 2.2) {
+                current_game_object->SetPosition(glm::vec3(2.2, current_game_object->GetPosition()[1], 0.0f));
+            }
         }
 
         current_game_object->Render(shader_);
