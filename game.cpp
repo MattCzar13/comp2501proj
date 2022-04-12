@@ -287,7 +287,7 @@ void Game::SetAllTextures(void)
 void Game::Controls(void)
 {
     // Get player game object
-    GameObject *player = game_objects_[0];
+    PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
     glm::vec3 curpos = player->GetPosition();
     glm::vec3 curvel = player->GetVelocity();
     glm::vec3 newPos;
@@ -319,15 +319,28 @@ void Game::Controls(void)
     }
     if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS) {
 
-        SpawnBullet(player, 16);
+        if (player->GetWeaponType() == 1) {
+            SpawnBullet(player, 16);
+        }
+        else if (player->GetWeaponType() == 2) {
+            double time = player->GetTime();
+            player->SetAngle(player->GetAngle() + 30);
+            SpawnBullet(player, 8);
+            player->SetTime(time);
+            player->SetAngle(player->GetAngle() -60);
+            SpawnBullet(player, 8);
+            player->SetTime(time);
+            player->SetAngle(player->GetAngle() + 30);
+            SpawnBullet(player, 8);
+        }
 
     }
     if (glfwGetKey(window_, GLFW_KEY_E) == GLFW_PRESS) {
-        if (type_weapon == 1) {
-            type_weapon = 2;
+        if (player->GetWeaponType() == 1) {
+            player->setWeaponType(2);
         }
         else {
-            type_weapon = 1;
+            player->setWeaponType(1);
         }
         //switch wepond mode
     }
@@ -342,22 +355,24 @@ void Game::SpawnEnemies() {
         enemySpawnTimer_ += 2;
 
         int randomNum = rand() % 100 + 1;
+        float x = rand() % 5 - 1.5;
+        //x = 2.5;
 
         if (randomNum > 50) {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[8], size_, "plane");
+            GameObject* enemy = new GameObject(glm::vec3(x, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[8], size_, "plane");
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
 
             printf("[!] SPAWNED A NEW ENEMY PLANE\n");
         }
         else if(randomNum > 25){
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[9], size_, "plane2");
+            GameObject* enemy = new GameObject(glm::vec3(x, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[9], size_, "plane2");
             game_objects_.push_back(enemy);
 
             printf("[!] SPAWNED A NEW ENEMY PLANE2 (SPINNER)\n");
         }
         else if(randomNum > 15) {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane");
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane3");
             enemy->SetVelocity(glm::vec3(0,0.06,0));
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
@@ -365,7 +380,7 @@ void Game::SpawnEnemies() {
             printf("[!] SPAWNED A NEW ENEMY PLANE3 (SIDE STEPPER)\n");
         }
         else if (randomNum > 5) {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane4");
+            GameObject* enemy = new GameObject(glm::vec3(x, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane4");
             enemy->SetVelocity(glm::vec3(0, -0.06, 0));
             enemy->SetAngle(180);
             enemy->SetROF(0.5);
@@ -383,11 +398,11 @@ void Game::SpawnPowerups() {
         powerupSpawnTimer_ += 8;
 
         if ((rand() % 100 + 1) > 50) {
-            game_objects_.push_back(new GameObject(glm::vec3(rand() % 5 - 2.5, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[6], size_, "health"));
+            game_objects_.push_back(new GameObject(glm::vec3(rand() % 5 - 1.5, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[6], size_, "health"));
             printf("[!] SPAWNED A NEW HEALTH PICKUP\n");
         }
         else {
-            game_objects_.push_back(new GameObject(glm::vec3(rand() % 5 - 2.5, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[7], size_, "shield"));
+            game_objects_.push_back(new GameObject(glm::vec3(rand() % 5 - 1.5, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[7], size_, "shield"));
             printf("[!] SPAWNED A NEW SHIELD PUCKUP\n");
         }
 
@@ -511,6 +526,7 @@ void Game::Update(double delta_time)
             current_game_object->SetAngle(current_game_object->GetAngle() + delta_time*40);
         }
         else if (current_game_object->GetTag() == "plane3") {
+            //std::printf("plane 3 x:%f\n", cos(glfwGetTime()) * 2.0);
             current_game_object->SetPosition(glm::vec3(cos(glfwGetTime())*2.0, current_game_object->GetPosition()[1], 0));
             SpawnBullet(current_game_object, 2);
         }
@@ -532,9 +548,9 @@ void Game::Update(double delta_time)
         }
 
         // Switch weapon
-        if (current_game_object->GetTag() == "bullet" & !shoot) {
-            current_game_object->SetTex(tex_[3+type_weapon]);
-        }
+        //if (current_game_object->GetTag() == "bullet" & !shoot) {
+            //current_game_object->SetTex(tex_[3+type_weapon]);
+        //}
         
         // Update the current game object
         current_game_object->Update(delta_time);
