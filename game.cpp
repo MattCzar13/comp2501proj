@@ -99,6 +99,10 @@ void Game::Setup(void)
     game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player"));
     game_objects_[0]->SetROF(0.4);
 
+    GameObject* heart = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[14], size_, "heart");
+    heart->SetScale(1);
+    game_objects_.push_back(heart);
+
     //spawn some powerups
     //game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 7.0f, 0.0f), tex_[6], size_, "health"));
     //game_objects_.push_back(new GameObject(glm::vec3(1.0f, 8.0f, 0.0f), tex_[7], size_, "shield"));
@@ -246,6 +250,9 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[9], (resources_directory_g + std::string("/textures/enemy_spinner.png")).c_str());
     SetTexture(tex_[10], (resources_directory_g + std::string("/textures/enemy_sideshot.png")).c_str());
     SetTexture(tex_[11], (resources_directory_g + std::string("/textures/enemy_largeboss.png")).c_str());
+    SetTexture(tex_[12], (resources_directory_g + std::string("/textures/heart_1.png")).c_str());
+    SetTexture(tex_[13], (resources_directory_g + std::string("/textures/heart_2.png")).c_str());
+    SetTexture(tex_[14], (resources_directory_g + std::string("/textures/heart_3.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
@@ -459,6 +466,13 @@ void Game::Update(double delta_time)
         else if (current_game_object->GetTag() == "plane3") {
             current_game_object->SetPosition(glm::vec3(cos(glfwGetTime())*2.0, current_game_object->GetPosition()[1], 0));
             SpawnBullet(current_game_object, 2);
+        }
+
+        if (current_game_object->GetTag() == "heart") {
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
+            current_game_object->SetTex(tex_[11 + player->GetHealth()]);
+            float x = player->GetPosition()[1];
+            current_game_object->SetPosition(glm::vec3(2.5, 5.7 + x, 0));
         }
 
         // Switch weapon

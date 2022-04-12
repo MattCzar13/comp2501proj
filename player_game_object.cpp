@@ -10,7 +10,7 @@ namespace game {
 PlayerGameObject::PlayerGameObject(const glm::vec3 &position, GLuint texture, GLint num_elements, std::string tag)
 	: GameObject(position, texture, num_elements, tag) {
 
-	health_ = 5;
+	health_ = 3;
 	shield_timer_ = 0;
 
 
@@ -34,11 +34,26 @@ void PlayerGameObject::Update(double delta_time) {
 }
 
 void PlayerGameObject::addHealth(int h) {
-	health_ += h;
+	if (health_ < 3) {
+		health_ += h;
+	}
+}
+
+void PlayerGameObject::subtractHealth(int h) {
+
+	if (health_ > 0) {
+		health_ -= h;
+	}
+
+
 }
 
 void PlayerGameObject::addShieldTimer(int t) {
 	shield_timer_ += (float) t;
+}
+
+int PlayerGameObject::GetHealth() {
+	return health_;
 }
 
 } // namespace game

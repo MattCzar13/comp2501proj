@@ -183,6 +183,9 @@ namespace game {
         else if (tag1 == "player" && tag2 == "shield") {
             return 1;
         }
+        else if (tag1 == "player" && tag2 == "bullet_e") {
+            return 1;
+        }
 
       
 
@@ -240,6 +243,11 @@ namespace game {
         else if (tag1 == "player" && tag2 == "shield") {
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
             player->addShieldTimer(5);
+            other_game_object->SetPosition(glm::vec3(100, 0, 0));
+        }
+        else if (tag1 == "player" && tag2 == "bullet_e") {
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
+            player->subtractHealth(1);
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
         }
 
