@@ -34,11 +34,13 @@ namespace game {
             inline float GetRadius(void) { return radius_; }
             inline void SetTex(GLuint texture) { texture_ = texture; }
             inline std::string GetTag(void) { return tag_; }
+            inline double GetTime(void) { return time_; }
 
             // Setters
             inline void SetPosition(const glm::vec3& position) { position_ = position; }
             inline void SetScale(float scale) { scale_ = scale; }
             inline void SetRadius(float radius) { radius_ = radius; }
+            inline void SetTime(double time) { time_ = time; }
 
 
             inline void SetVelocity(const glm::vec3& velocity) { velocity_ = velocity; }
@@ -54,6 +56,7 @@ namespace game {
             // Object's details
             GLint num_elements_;
             std::string tag_;
+            double time_;
 
             // Object's texture reference
             GLuint texture_;

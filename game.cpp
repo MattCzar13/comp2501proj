@@ -306,7 +306,7 @@ void Game::HandleSpawning() {
     if (glfwGetTime() > spawnTimer_) {
         spawnTimer_ += 3;
 
-        game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+1.0f, 0.0f), tex_[1], size_, "plane"));
+        game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+5.0f, 0.0f), tex_[1], size_, "plane"));
         printf("[!] SPAWNED A NEW ENEMY PLANE\n");
     }
 
