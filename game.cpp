@@ -99,8 +99,8 @@ void Game::Setup(void)
     game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player"));
 
     //spawn some powerups
-    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 7.0f, 0.0f), tex_[6], size_, "health"));
-    game_objects_.push_back(new GameObject(glm::vec3(1.0f, 8.0f, 0.0f), tex_[7], size_, "shield"));
+    //game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 7.0f, 0.0f), tex_[6], size_, "health"));
+    //game_objects_.push_back(new GameObject(glm::vec3(1.0f, 8.0f, 0.0f), tex_[7], size_, "shield"));
     
     // Setup background
     for (int i = 0; i < 50; i++) {
@@ -301,11 +301,30 @@ void Game::Controls(void)
 
 void Game::SpawnEnemies() {
 
-    if (glfwGetTime() > spawnTimer_) {
-        spawnTimer_ += 5;
+    if (glfwGetTime() > enemySpawnTimer_) {
+        enemySpawnTimer_ += 5;
 
         game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+8.0f, 0.0f), tex_[1], size_, "plane"));
         printf("[!] SPAWNED A NEW ENEMY PLANE\n");
+    }
+
+}
+
+void Game::SpawnPowerups() {
+
+    if (glfwGetTime() > powerupSpawnTimer_) {
+        powerupSpawnTimer_ += 8;
+
+        if ((rand() % 100 + 1) > 50) {
+            game_objects_.push_back(new GameObject(glm::vec3(rand() % 5 - 2.5, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[6], size_, "health"));
+            printf("[!] SPAWNED A NEW HEALTH PICKUP\n");
+        }
+        else {
+            game_objects_.push_back(new GameObject(glm::vec3(rand() % 5 - 2.5, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[7], size_, "shield"));
+            printf("[!] SPAWNED A NEW SHIELD PUCKUP\n");
+        }
+
+
     }
 
 }
@@ -355,6 +374,7 @@ void Game::Update(double delta_time)
     CheckAllCollisions(game_objects_, delta_time);
 
     SpawnEnemies();
+    SpawnPowerups();
 
     // Main iteration
 
