@@ -96,7 +96,7 @@ void Game::Setup(void)
 
     // Setup the player object (position, texture, vertex count)
     // Note that, in this specific implementation, the player object should always be the first object in the game object vector 
-    game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player"));
+    game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player", tex_[15]));
     game_objects_[0]->SetROF(0.4);
 
     GameObject* heart = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[14], size_, "heart");
@@ -259,6 +259,7 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[12], (resources_directory_g + std::string("/textures/heart_1.png")).c_str());
     SetTexture(tex_[13], (resources_directory_g + std::string("/textures/heart_2.png")).c_str());
     SetTexture(tex_[14], (resources_directory_g + std::string("/textures/heart_3.png")).c_str());
+    SetTexture(tex_[15], (resources_directory_g + std::string("/textures/playerShield.png")).c_str());
     SetTexture(tex_[16], (resources_directory_g + std::string("/textures/progressbar.png")).c_str());
     SetTexture(tex_[17], (resources_directory_g + std::string("/textures/progressbar_arrow.png")).c_str());
     

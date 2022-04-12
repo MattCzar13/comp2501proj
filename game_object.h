@@ -25,7 +25,7 @@ namespace game {
             virtual void Update(double delta_time);
 
             // Renders the GameObject using a shader
-            void Render(Shader &shader);
+            virtual void Render(Shader &shader);
 
             // Getters
             inline glm::vec3& GetPosition(void) { return position_; }
