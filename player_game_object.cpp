@@ -30,7 +30,7 @@ void PlayerGameObject::Update(double delta_time) {
 	// Call the parent's update method to move the object in standard way, if desired
 	GameObject::Update(delta_time);
 
-	std::printf("Health: %d, Shield timer: %f\n", health_, shield_timer_);
+	//std::printf("Health: %d, Shield timer: %f\n", health_, shield_timer_);
 }
 
 void PlayerGameObject::addHealth(int h) {

@@ -189,18 +189,24 @@ namespace game {
         }
         else if (tag1 == "bullet" && tag2 == "plane") {
             printf("collision between bullet and plane\n");
+            other_game_object->SetPosition(glm::vec3(100, 0, 0));
+            current_game_object->SetPosition(glm::vec3(-100, 0, 0));
 
         }
         else if (tag1 == "plane" && tag2 == "bullet") {
             printf("collision between plane and bullet\n");
+            other_game_object->SetPosition(glm::vec3(100, 0, 0));
+            current_game_object->SetPosition(glm::vec3(-100, 0, 0));
         }
         else if (tag1 == "player" && tag2 == "health") {
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
             player->addHealth(1);
+            other_game_object->SetPosition(glm::vec3(100,0,0));
         }
         else if (tag1 == "player" && tag2 == "shield") {
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
             player->addShieldTimer(5);
+            other_game_object->SetPosition(glm::vec3(100, 0, 0));
         }
 
     }

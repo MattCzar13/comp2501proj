@@ -97,12 +97,10 @@ void Game::Setup(void)
     // Setup the player object (position, texture, vertex count)
     // Note that, in this specific implementation, the player object should always be the first object in the game object vector 
     game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player"));
-    //setup bullet
-    game_objects_.push_back(new GameObject(glm::vec3(100.0f, 0.0f, 0.0f), tex_[4], size_, "bullet"));
 
     //spawn some powerups
-    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 15.0f, 0.0f), tex_[6], size_, "health"));
-    game_objects_.push_back(new GameObject(glm::vec3(1.0f, 20.0f, 0.0f), tex_[7], size_, "shield"));
+    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 7.0f, 0.0f), tex_[6], size_, "health"));
+    game_objects_.push_back(new GameObject(glm::vec3(1.0f, 8.0f, 0.0f), tex_[7], size_, "shield"));
     
     // Setup background
     for (int i = 0; i < 50; i++) {
