@@ -121,7 +121,10 @@ void Game::Setup(void)
     //game_objects_.push_back(new GameObject(glm::vec3(1.0f, 8.0f, 0.0f), tex_[7], size_, "shield"));
 
     // Setup hud
-    GameObject* hud = new GameObject(glm::vec3(0.0f, -1.0f, 0.0f), tex_[16], size_, "hud_bar");
+    GameObject* hud = new GameObject(glm::vec3(0.0001f, 0.0f, 0.0f), tex_[22], size_, "title");
+    hud->SetScale(5.0f);
+    fg_objects_.push_back(hud);
+    hud = new GameObject(glm::vec3(0.0f, -1.0f, 0.0f), tex_[16], size_, "hud_bar");
     hud->SetScale(5.0f);
     fg_objects_.push_back(hud);
     hud = new GameObject(glm::vec3(0.0f, -2.0f, 0.0f), tex_[17], size_, "hud_arrow");
@@ -292,6 +295,7 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[19], (resources_directory_g + std::string("/textures/bg2.png")).c_str());
     SetTexture(tex_[20], (resources_directory_g + std::string("/textures/bg3.png")).c_str());
     SetTexture(tex_[21], (resources_directory_g + std::string("/textures/shield_cosmetic.png")).c_str());
+    SetTexture(tex_[22], (resources_directory_g + std::string("/textures/title.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
@@ -464,8 +468,16 @@ void Game::Update(double delta_time)
 
     CheckAllCollisions(game_objects_, delta_time);
 
-    SpawnEnemies();
-    SpawnPowerups();
+    // Enemies + powerups will not spawn if the player hasn't "started" the game by moving forward a bit
+
+    if (game_objects_[0]->GetPosition()[1] > 10) {
+        SpawnEnemies();
+        SpawnPowerups();
+    }
+    else if (game_objects_[0]->GetPosition()[1] <= 10) {
+        enemySpawnTimer_ = glfwGetTime();
+        powerupSpawnTimer_ = glfwGetTime();
+    }
 
     // Main iteration
 
@@ -476,6 +488,20 @@ void Game::Update(double delta_time)
 
         current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], game_objects_[0]->GetPosition()[1], 0.0f));
 
+        if (current_game_object->GetTag() == "title") {
+            // if the game has "started", make the title slide off screen and then die
+            if (game_objects_[0]->GetPosition()[1] > 5) {
+                current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0] * 1.1, current_game_object->GetPosition()[1] + 3, 0.0f));
+                if (CheckOutOfBounds(current_game_object)) {
+                    printf("[X] Removed title object\n");
+                    fg_objects_.erase(fg_objects_.begin() + i);
+                }
+            }
+            else {
+                current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 3, 0.0f));
+            }
+            
+        }
         if (current_game_object->GetTag() == "hud_bar") {
             current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 0.5, 0.0f));
         }
