@@ -296,6 +296,8 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[20], (resources_directory_g + std::string("/textures/bg3.png")).c_str());
     SetTexture(tex_[21], (resources_directory_g + std::string("/textures/shield_cosmetic.png")).c_str());
     SetTexture(tex_[22], (resources_directory_g + std::string("/textures/title.png")).c_str());
+    SetTexture(tex_[23], (resources_directory_g + std::string("/textures/bullet_green.png")).c_str());
+    SetTexture(tex_[24], (resources_directory_g + std::string("/textures/bullet_orange.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
@@ -438,16 +440,26 @@ void Game::SpawnPowerups() {
 void Game::SpawnBullet(GameObject* plane, int speed) {
 
     std::string bulletTag;
+    int textureNumber;
 
     if (plane->GetTag() == "player") {
         bulletTag = "bullet_p";
+        PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
+        if (player->GetWeaponType() == 1) {
+            textureNumber = 4;
+        }
+        else {
+            textureNumber = 23;
+        }
+        
     }
     else if (plane->GetTag() == "plane" || plane->GetTag() == "plane2" || plane->GetTag() == "plane3" || plane->GetTag() == "plane4") {
         bulletTag = "bullet_e";
+        textureNumber = 24;
     }
 
     if (plane->GetTime() < glfwGetTime()) {
-        GameObject* bullet = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[4], size_, bulletTag);
+        GameObject* bullet = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[textureNumber], size_, bulletTag);
         bullet->SetPosition(plane->GetPosition());
         bullet->SetAngle(plane->GetAngle());
         bullet->SetScale(0.5);
