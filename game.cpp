@@ -100,7 +100,7 @@ void Game::Setup(void)
     
     // Setup background
     for (int i = 0; i < 50; i++) {
-        GameObject* background = new GameObject(glm::vec3(0.0f, i, 0.0f), tex_[3], size_, "ground");
+        GameObject* background = new GameObject(glm::vec3(0.0f, i * 10, 0.0f), tex_[3], size_, "ground");
         background->SetScale(10.0);
         bg_objects_.push_back(background);
     }
@@ -309,8 +309,9 @@ void Game::SpawnBullet(GameObject* plane) {
     if (plane->GetTime() < glfwGetTime()) {
         GameObject* bullet = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[4], size_, "bullet");
         bullet->SetPosition(plane->GetPosition());
-        bullet->SetAngle(90);
-        bullet->SetVelocity((glm::vec3((10 * cos((bullet->GetAngle()) * ((atan(1) * 4)) / 180)), 10 * sin((bullet->GetAngle()) * ((atan(1) * 4)) / 180), 0)));
+        bullet->SetAngle(0);
+        bullet->SetScale(0.5);
+        bullet->SetVelocity((glm::vec3((10 * cos((bullet->GetAngle() + 90) * ((atan(1) * 4)) / 180)), 10 * sin((bullet->GetAngle() + 90) * ((atan(1) * 4)) / 180), 0)));
         game_objects_.push_back(bullet);
         plane->SetTime(0);
     }

@@ -29,22 +29,43 @@ void GameObject::Update(double delta_time) {
     position_ += velocity_ * ((float) delta_time);
 }
 
-
-void GameObject::Render(Shader &shader) {
-
-    // Bind the entity's texture
-    glBindTexture(GL_TEXTURE_2D, texture_);
-
+void GameObject::PerformMatrixCalcs() {
     // Setup the scaling matrix for the shader
     glm::mat4 scaling_matrix = glm::scale(glm::mat4(1.0f), glm::vec3(scale_, scale_, 1.0));
 
     // Set up the translation matrix for the shader
-    glm::mat4 translation_matrix = glm::translate(glm::mat4(1.0f), position_);
+    glm::mat4 translation_matrix = glm::translate(glm::mat4(1.0f), position_ + pos_origin_);
 
-    // Setup the transformation matrix for the shader
-    glm::mat4 transformation_matrix = scaling_matrix * translation_matrix;
+    // Setup the rotation matrix for the shader
+    glm::mat4 rotation_matrix = glm::rotate(glm::mat4(1.0f), angle_, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    // TODO: Add other types of transformations
+    if (tag_ == "orbit") {
+        // this tag will make the object orbit around the parent, rather than rotate on its anchor
+        transformation_matrix = parent_matrix * (rotation_matrix * translation_matrix * scaling_matrix);
+    }
+    else {
+        transformation_matrix = parent_matrix * (translation_matrix * rotation_matrix * scaling_matrix);
+    }
+
+}
+
+
+void GameObject::Render(Shader& shader) {
+
+    PerformMatrixCalcs();
+
+    // Offset children's matrices
+    for (GameObject* c : child_) {
+        c->parent_matrix = transformation_matrix;
+
+        if (c->GetTag() == "orbit") {
+            c->SetAngle(c->GetAngle() + 10);
+        }
+        c->Render(shader);
+    }
+
+    // Bind the entity's texture
+    glBindTexture(GL_TEXTURE_2D, texture_);
 
     // Set the transformation matrix in the shader
     shader.SetUniformMat4("transformation_matrix", transformation_matrix);

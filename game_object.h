@@ -7,6 +7,7 @@
 #include <string>
 
 #include "shader.h"
+#include <vector>
 
 namespace game {
 
@@ -49,6 +50,13 @@ namespace game {
 
             inline void SetVelocity(const glm::vec3& velocity) { velocity_ = velocity; }
 
+            // Others
+
+            void PerformMatrixCalcs(void);
+
+            // Object's children
+            std::vector<GameObject*> child_;
+
         protected:
             // Object's Transform Variables
             // TODO: Add more transformation variables
@@ -58,6 +66,10 @@ namespace game {
             float radius_;
 
             float angle_;
+
+            glm::vec3 pos_origin_ = glm::vec3(0.0f, 0.0f, 0.0f);
+            glm::mat4 transformation_matrix;
+            glm::mat4 parent_matrix;
 
             // Object's details
             GLint num_elements_;
