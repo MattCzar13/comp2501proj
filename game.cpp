@@ -363,7 +363,13 @@ void Game::Controls(void)
         //switch wepond mode
     }
     if (glfwGetKey(window_, GLFW_KEY_Q) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window_, true);
+        if (player->GetWeaponType() == 1) {
+            player->setWeaponType(2);
+        }
+        else {
+            player->setWeaponType(1);
+        }
+        //switch wepond mode
     }
 }
 
