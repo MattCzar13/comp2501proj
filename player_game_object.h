@@ -17,6 +17,8 @@ namespace game {
 
             void addHealth(int h);
             void addShieldTimer(int t);
+            void subtractHealth(int h);
+            int GetHealth();
 
         private:
            
