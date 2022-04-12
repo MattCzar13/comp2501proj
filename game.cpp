@@ -242,6 +242,10 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[5], (resources_directory_g + std::string("/textures/missile.png")).c_str());
     SetTexture(tex_[6], (resources_directory_g + std::string("/textures/health.png")).c_str());
     SetTexture(tex_[7], (resources_directory_g + std::string("/textures/shield.png")).c_str());
+    SetTexture(tex_[8], (resources_directory_g + std::string("/textures/enemy_red.png")).c_str());
+    SetTexture(tex_[9], (resources_directory_g + std::string("/textures/enemy_spinner.png")).c_str());
+    SetTexture(tex_[10], (resources_directory_g + std::string("/textures/enemy_sideshot.png")).c_str());
+    SetTexture(tex_[11], (resources_directory_g + std::string("/textures/enemy_largeboss.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
@@ -308,20 +312,20 @@ void Game::SpawnEnemies() {
         int randomNum = rand() % 100 + 1;
 
         if (randomNum > 50) {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[1], size_, "plane");
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[8], size_, "plane");
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
 
             printf("[!] SPAWNED A NEW ENEMY PLANE\n");
         }
         else if(randomNum > 25){
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[1], size_, "plane2");
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[9], size_, "plane2");
             game_objects_.push_back(enemy);
 
             printf("[!] SPAWNED A NEW ENEMY PLANE2\n");
         }
         else {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[1], size_, "plane3");
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane3");
             enemy->SetVelocity(glm::vec3(0,0.06,0));
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
