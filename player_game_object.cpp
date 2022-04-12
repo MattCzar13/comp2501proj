@@ -13,6 +13,7 @@ PlayerGameObject::PlayerGameObject(const glm::vec3 &position, GLuint texture, GL
 	health_ = 3;
 	shield_timer_ = 0;
 	shield_ = shield;
+	weapon_type_ = 1;
 
 
 	}
@@ -34,6 +35,13 @@ void PlayerGameObject::Update(double delta_time) {
 	else {
 		shield_timer_ = 0;
 
+	}
+
+	if (weapon_type_ == 1) {
+		rof_ = 0.5;
+	}
+	else {
+		rof_ = 0.8;
 	}
 
 	// Call the parent's update method to move the object in standard way, if desired
@@ -82,6 +90,14 @@ void PlayerGameObject::addShieldTimer(int t) {
 
 int PlayerGameObject::GetHealth() {
 	return health_;
+}
+
+int PlayerGameObject::GetWeaponType() {
+	return weapon_type_;
+}
+
+void PlayerGameObject::setWeaponType(int wt) {
+	weapon_type_ = wt;
 }
 
 } // namespace game

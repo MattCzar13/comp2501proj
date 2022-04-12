@@ -28,12 +28,15 @@ namespace game {
             void addShieldTimer(int t);
             void subtractHealth(int h);
             int GetHealth();
+            int GetWeaponType();
+            void setWeaponType(int wt);
 
         private:
            
             int health_;
             float shield_timer_;
             GLuint shield_;
+            int weapon_type_;
 
 
     }; // class PlayerGameObject
