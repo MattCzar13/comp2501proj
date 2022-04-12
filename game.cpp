@@ -99,6 +99,19 @@ void Game::Setup(void)
     game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player", tex_[15]));
     game_objects_[0]->SetROF(0.4);
 
+    GameObject* orbit = new GameObject(glm::vec3(0.5f, 0.0f, 0.0f), tex_[21], size_, "orbit");
+    orbit->SetScale(0.0f);
+    game_objects_[0]->child_.push_back(orbit);
+    orbit = new GameObject(glm::vec3(-0.5f, 0.0f, 0.0f), tex_[21], size_, "orbit");
+    orbit->SetScale(0.0f);
+    game_objects_[0]->child_.push_back(orbit);
+    orbit = new GameObject(glm::vec3(0.0f, 0.5f, 0.0f), tex_[21], size_, "orbit");
+    orbit->SetScale(0.0f);
+    game_objects_[0]->child_.push_back(orbit);
+    orbit = new GameObject(glm::vec3(0.0f, -0.5f, 0.0f), tex_[21], size_, "orbit");
+    orbit->SetScale(0.0f);
+    game_objects_[0]->child_.push_back(orbit);
+
     GameObject* heart = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[14], size_, "heart");
     heart->SetScale(1);
     game_objects_.push_back(heart);
@@ -278,6 +291,7 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[18], (resources_directory_g + std::string("/textures/bg1.png")).c_str());
     SetTexture(tex_[19], (resources_directory_g + std::string("/textures/bg2.png")).c_str());
     SetTexture(tex_[20], (resources_directory_g + std::string("/textures/bg3.png")).c_str());
+    SetTexture(tex_[21], (resources_directory_g + std::string("/textures/shield_cosmetic.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);

@@ -23,9 +23,17 @@ void PlayerGameObject::Update(double delta_time) {
 	// Special player updates go here
 	if (shield_timer_ > 0) {
 		shield_timer_ -= delta_time;
+
+		// This is to make sure it only sets the scale once, instead of constantly when the shield is down
+		if (shield_timer_ <= 0) {
+			for (int i = 0; i < child_.size(); i++) {
+				child_[i]->SetScale(0.0f);
+			}
+		}
 	}
 	else {
 		shield_timer_ = 0;
+
 	}
 
 	// Call the parent's update method to move the object in standard way, if desired
