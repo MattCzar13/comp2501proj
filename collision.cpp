@@ -165,6 +165,13 @@ namespace game {
         else if (tag1 == "bullet" && tag2 == "plane") {
             return 1;
         }
+        else if (tag1 == "player" && tag2 == "health") {
+            return 1;
+        }
+        else if (tag1 == "player" && tag2 == "shield") {
+            return 1;
+        }
+
       
 
     }
@@ -182,9 +189,18 @@ namespace game {
         }
         else if (tag1 == "bullet" && tag2 == "plane") {
             printf("collision between bullet and plane\n");
+
         }
         else if (tag1 == "plane" && tag2 == "bullet") {
             printf("collision between plane and bullet\n");
+        }
+        else if (tag1 == "player" && tag2 == "health") {
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
+            player->addHealth(1);
+        }
+        else if (tag1 == "player" && tag2 == "shield") {
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
+            player->addShieldTimer(5);
         }
 
     }
