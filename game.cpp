@@ -97,6 +97,10 @@ void Game::Setup(void)
     // Setup the player object (position, texture, vertex count)
     // Note that, in this specific implementation, the player object should always be the first object in the game object vector 
     game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player"));
+
+    //spawn some powerups
+    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 7.0f, 0.0f), tex_[6], size_, "health"));
+    game_objects_.push_back(new GameObject(glm::vec3(1.0f, 8.0f, 0.0f), tex_[7], size_, "shield"));
     
     // Setup background
     for (int i = 0; i < 50; i++) {
@@ -235,6 +239,8 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[3], (resources_directory_g+std::string("/textures/Back.bmp")).c_str());
     SetTexture(tex_[4], (resources_directory_g + std::string("/textures/bullet.png")).c_str());
     SetTexture(tex_[5], (resources_directory_g + std::string("/textures/missile.png")).c_str());
+    SetTexture(tex_[6], (resources_directory_g + std::string("/textures/health.png")).c_str());
+    SetTexture(tex_[7], (resources_directory_g + std::string("/textures/shield.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
@@ -296,7 +302,7 @@ void Game::Controls(void)
 void Game::SpawnEnemies() {
 
     if (glfwGetTime() > spawnTimer_) {
-        spawnTimer_ += 3;
+        spawnTimer_ += 5;
 
         game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+8.0f, 0.0f), tex_[1], size_, "plane"));
         printf("[!] SPAWNED A NEW ENEMY PLANE\n");
