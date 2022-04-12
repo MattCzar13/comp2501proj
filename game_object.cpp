@@ -68,7 +68,7 @@ void GameObject::Render(Shader& shader) {
         c->parent_matrix = transformation_matrix;
 
         if (c->GetTag() == "orbit") {
-            c->SetAngle(c->GetAngle() + 10);
+            c->SetAngle(c->GetAngle() + 5);
         }
         c->Render(shader);
     }

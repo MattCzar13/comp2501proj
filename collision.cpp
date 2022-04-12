@@ -260,6 +260,11 @@ namespace game {
         else if (tag1 == "player" && tag2 == "shield") {
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
             player->addShieldTimer(5);
+            
+            for (int i = 0; i < player->child_.size(); i++) {
+                player->child_[i]->SetScale(0.2f);
+            }
+
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
         }
         else if (tag1 == "player" && tag2 == "bullet_e") {
