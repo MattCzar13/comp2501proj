@@ -76,8 +76,11 @@ namespace game {
             void Update(double delta_time);
 
             // Function that handles enemy spawning
-            void HandleSpawning(void);
+            void SpawnEnemies(void);
             double spawnTimer_ = 1;
+
+            // Function that checks if an object is outside of the viewport
+            bool CheckOutOfBounds(GameObject* object);
 
     }; // class Game
 

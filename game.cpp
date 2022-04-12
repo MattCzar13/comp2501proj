@@ -301,17 +301,35 @@ void Game::Controls(void)
     }
 }
 
-void Game::HandleSpawning() {
+void Game::SpawnEnemies() {
 
     if (glfwGetTime() > spawnTimer_) {
         spawnTimer_ += 3;
 
-        game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+5.0f, 0.0f), tex_[1], size_, "plane"));
+        game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+8.0f, 0.0f), tex_[1], size_, "plane"));
         printf("[!] SPAWNED A NEW ENEMY PLANE\n");
     }
 
 }
 
+bool Game::CheckOutOfBounds(GameObject* object) {
+
+    int width, height;
+    glfwGetWindowSize(window_, &width, &height);
+
+    // If the object is outside the width of the screen
+    if ((object->GetPosition()[0] < -(width / 2)) || (object->GetPosition()[0] > (width / 2))) {
+        return true;
+    }
+
+    // If the object is outside the height of the screen (plus a little wiggle room at the top for things to spawn!!)
+    if ((object->GetPosition()[1] < (game_objects_[0]->GetPosition()[1] - 3.0f)) || (object->GetPosition()[1] > (game_objects_[0]->GetPosition()[1] + 8.0f))) {
+        return true;
+    }
+
+    return false;
+
+}
 
 void Game::Update(double delta_time)
 {
@@ -321,7 +339,7 @@ void Game::Update(double delta_time)
 
     CheckAllCollisions(game_objects_, delta_time);
 
-    HandleSpawning();
+    SpawnEnemies();
 
     // Main iteration
 
@@ -339,12 +357,10 @@ void Game::Update(double delta_time)
         // Get the current game object
         GameObject* current_game_object = game_objects_[i];
 
-        // leave ground for last, because of how z ordering works
-        /*
-        if (current_game_object->GetTag() == "ground") {
-            continue;
+        if (CheckOutOfBounds(current_game_object)) {
+            printf("[X] Removed OOB object\n");
+            game_objects_.erase(game_objects_.begin() + i);
         }
-        */
 
         //set the position of bullet
         if (current_game_object->GetTag() == "bullet" & shoot) {
@@ -379,7 +395,6 @@ void Game::Update(double delta_time)
             current_game_object->SetTex(tex_[3+type_weapon]);
         }
         
-
         // Update the current game object
         current_game_object->Update(delta_time);
 
