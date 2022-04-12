@@ -168,6 +168,9 @@ namespace game {
         else if (tag1 == "plane3" && tag2 == "bullet_p") {
             return 1;
         }
+        else if (tag1 == "plane4" && tag2 == "bullet_p") {
+            return 1;
+        }
         else if (tag1 == "bullet_p" && tag2 == "plane") {
             return 1;
         }
@@ -175,6 +178,9 @@ namespace game {
             return 1;
         }
         else if (tag1 == "bullet_p" && tag2 == "plane3") {
+            return 1;
+        }
+        else if (tag1 == "bullet_p" && tag2 == "plane4") {
             return 1;
         }
         else if (tag1 == "player" && tag2 == "health") {
