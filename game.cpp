@@ -307,7 +307,7 @@ void Game::Controls(void)
 void Game::SpawnEnemies() {
 
     if (glfwGetTime() > enemySpawnTimer_) {
-        enemySpawnTimer_ += 5;
+        enemySpawnTimer_ += 2;
 
         int randomNum = rand() % 100 + 1;
 
@@ -322,15 +322,24 @@ void Game::SpawnEnemies() {
             GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[9], size_, "plane2");
             game_objects_.push_back(enemy);
 
-            printf("[!] SPAWNED A NEW ENEMY PLANE2\n");
+            printf("[!] SPAWNED A NEW ENEMY PLANE2 (SPINNER)\n");
         }
-        else {
+        else if(randomNum > 15) {
             GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane3");
             enemy->SetVelocity(glm::vec3(0,0.06,0));
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
 
-            printf("[!] SPAWNED A NEW ENEMY PLANE3\n");
+            printf("[!] SPAWNED A NEW ENEMY PLANE3 (SIDE STEPPER)\n");
+        }
+        else if (randomNum > 5) {
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane4");
+            enemy->SetVelocity(glm::vec3(0, -0.06, 0));
+            enemy->SetAngle(180);
+            enemy->SetROF(0.5);
+            game_objects_.push_back(enemy);
+
+            printf("[!] SPAWNED A NEW ENEMY PLANE4 (SIDESHOT)\n");
         }
     }
 
@@ -459,6 +468,15 @@ void Game::Update(double delta_time)
         else if (current_game_object->GetTag() == "plane3") {
             current_game_object->SetPosition(glm::vec3(cos(glfwGetTime())*2.0, current_game_object->GetPosition()[1], 0));
             SpawnBullet(current_game_object, 2);
+        }
+        else if (current_game_object->GetTag() == "plane4") {
+            double time = current_game_object->GetTime();
+            current_game_object->SetAngle(current_game_object->GetAngle() - 90);
+            SpawnBullet(current_game_object, 2);
+            current_game_object->SetTime(time);
+            current_game_object->SetAngle(current_game_object->GetAngle() + 180);
+            SpawnBullet(current_game_object, 2);
+            current_game_object->SetAngle(current_game_object->GetAngle() - 90);
         }
 
         // Switch weapon
