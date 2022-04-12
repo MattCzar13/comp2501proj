@@ -356,22 +356,23 @@ void Game::SpawnEnemies() {
         enemySpawnTimer_ += 2;
 
         int randomNum = rand() % 100 + 1;
+        int randomNum2 = rand() % 100 + 1;
 
         if (randomNum > 50) {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[8], size_, "plane");
+            GameObject* enemy = new GameObject(glm::vec3((randomNum2 - 50) * 0.04, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[8], size_, "plane");
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
 
             printf("[!] SPAWNED A NEW ENEMY PLANE\n");
         }
         else if(randomNum > 25){
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[9], size_, "plane2");
+            GameObject* enemy = new GameObject(glm::vec3((randomNum2 - 50) * 0.04, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[9], size_, "plane2");
             game_objects_.push_back(enemy);
 
             printf("[!] SPAWNED A NEW ENEMY PLANE2 (SPINNER)\n");
         }
         else if(randomNum > 15) {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane");
+            GameObject* enemy = new GameObject(glm::vec3((randomNum2 - 50) * 0.04, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[9], size_, "plane3");
             enemy->SetVelocity(glm::vec3(0,0.06,0));
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
@@ -379,7 +380,7 @@ void Game::SpawnEnemies() {
             printf("[!] SPAWNED A NEW ENEMY PLANE3 (SIDE STEPPER)\n");
         }
         else if (randomNum > 5) {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane4");
+            GameObject* enemy = new GameObject(glm::vec3((randomNum2 - 50) * 0.04, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane4");
             enemy->SetVelocity(glm::vec3(0, -0.06, 0));
             enemy->SetAngle(180);
             enemy->SetROF(0.5);
