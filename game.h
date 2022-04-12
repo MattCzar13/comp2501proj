@@ -85,7 +85,7 @@ namespace game {
             bool CheckOutOfBounds(GameObject* object);
 
             // Function that handles bullet spawning, automatically assumes whether the object is a player or enemy
-            void SpawnBullet(GameObject* plane);
+            void SpawnBullet(GameObject* plane, int speed);
 
     }; // class Game
 

@@ -16,9 +16,18 @@ GameObject::GameObject(const glm::vec3 &position, GLuint texture, GLint num_elem
     texture_ = texture;
     radius_ = 0.5;
 
+
     angle_ = 0.0f;
     time_ = 0;
-    rof_ = 0.4;
+    rof_ = 2.5;
+
+    if (tag == "plane2") {
+        velocity_ = glm::vec3(0.0f, -1.0f, 0.0f);
+        angle_ = rand() % 360 + 1;
+    }
+    if (tag == "bullet_p" || tag == "bullet_e") {
+        radius_ = 0.2;
+    }
 
 }
 

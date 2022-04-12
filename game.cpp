@@ -97,6 +97,7 @@ void Game::Setup(void)
     // Setup the player object (position, texture, vertex count)
     // Note that, in this specific implementation, the player object should always be the first object in the game object vector 
     game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player"));
+    game_objects_[0]->SetROF(0.4);
 
     //spawn some powerups
     //game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 7.0f, 0.0f), tex_[6], size_, "health"));
@@ -282,7 +283,7 @@ void Game::Controls(void)
     }
     if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS) {
 
-        SpawnBullet(player);
+        SpawnBullet(player, 16);
 
     }
     if (glfwGetKey(window_, GLFW_KEY_E) == GLFW_PRESS) {
@@ -304,11 +305,21 @@ void Game::SpawnEnemies() {
     if (glfwGetTime() > enemySpawnTimer_) {
         enemySpawnTimer_ += 5;
 
-        GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[1], size_, "plane");
-        enemy->SetAngle(180);
-        game_objects_.push_back(enemy);
 
-        printf("[!] SPAWNED A NEW ENEMY PLANE\n");
+
+        if ((rand() % 100 + 1) > 50) {
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[1], size_, "plane");
+            enemy->SetAngle(180);
+            game_objects_.push_back(enemy);
+
+            printf("[!] SPAWNED A NEW ENEMY PLANE\n");
+        }
+        else {
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[1], size_, "plane2");
+            game_objects_.push_back(enemy);
+
+            printf("[!] SPAWNED A NEW ENEMY PLANE2\n");
+        }
     }
 
 }
@@ -332,7 +343,7 @@ void Game::SpawnPowerups() {
 
 }
 
-void Game::SpawnBullet(GameObject* plane) {
+void Game::SpawnBullet(GameObject* plane, int speed) {
 
     std::string bulletTag;
 
@@ -346,9 +357,9 @@ void Game::SpawnBullet(GameObject* plane) {
     if (plane->GetTime() < glfwGetTime()) {
         GameObject* bullet = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[4], size_, bulletTag);
         bullet->SetPosition(plane->GetPosition());
-        bullet->SetAngle(0);
+        bullet->SetAngle(plane->GetAngle());
         bullet->SetScale(0.5);
-        bullet->SetVelocity((glm::vec3((10 * cos((plane->GetAngle() + 90) * ((atan(1) * 4)) / 180)), 10 * sin((plane->GetAngle() + 90) * ((atan(1) * 4)) / 180), 0)));
+        bullet->SetVelocity((glm::vec3((speed * cos((plane->GetAngle() + 90) * ((atan(1) * 4)) / 180)), speed * sin((plane->GetAngle() + 90) * ((atan(1) * 4)) / 180), 0)));
         game_objects_.push_back(bullet);
         plane->SetTime(0);
     }
@@ -416,7 +427,22 @@ void Game::Update(double delta_time)
                 current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, -0.01, 0));
             }
 
-            SpawnBullet(current_game_object);
+            SpawnBullet(current_game_object, 2);
+        }
+        else if (current_game_object->GetTag() == "plane2") {
+            double time = current_game_object->GetTime();
+            current_game_object->SetAngle(current_game_object->GetAngle() + 90);
+            SpawnBullet(current_game_object, 2);
+            current_game_object->SetTime(time);
+            current_game_object->SetAngle(current_game_object->GetAngle() + 90);
+            SpawnBullet(current_game_object, 2);
+            current_game_object->SetTime(time);
+            current_game_object->SetAngle(current_game_object->GetAngle() + 90);
+            SpawnBullet(current_game_object, 2);
+            current_game_object->SetTime(time);
+            current_game_object->SetAngle(current_game_object->GetAngle() + 90);
+            SpawnBullet(current_game_object, 2);
+            current_game_object->SetAngle(current_game_object->GetAngle() + delta_time*40);
         }
 
         // Switch weapon
