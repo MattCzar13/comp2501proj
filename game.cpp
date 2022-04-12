@@ -372,7 +372,7 @@ void Game::SpawnEnemies() {
             printf("[!] SPAWNED A NEW ENEMY PLANE2 (SPINNER)\n");
         }
         else if(randomNum > 15) {
-            GameObject* enemy = new GameObject(glm::vec3((randomNum2 - 50) * 0.04, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[9], size_, "plane3");
+            GameObject* enemy = new GameObject(glm::vec3((randomNum2 - 50) * 0.04, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[8], size_, "plane3");
             enemy->SetVelocity(glm::vec3(0,0.06,0));
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
