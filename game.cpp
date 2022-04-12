@@ -108,10 +108,10 @@ void Game::Setup(void)
     //game_objects_.push_back(new GameObject(glm::vec3(1.0f, 8.0f, 0.0f), tex_[7], size_, "shield"));
 
     // Setup hud
-    GameObject* hud = new GameObject(glm::vec3(0.0f, -1.0f, 0.0f), tex_[15], size_, "hud_bar");
+    GameObject* hud = new GameObject(glm::vec3(0.0f, -1.0f, 0.0f), tex_[16], size_, "hud_bar");
     hud->SetScale(5.0f);
     fg_objects_.push_back(hud);
-    fg_objects_.push_back(new GameObject(glm::vec3(0.0f, -2.0f, 0.0f), tex_[16], size_, "hud_arrow"));
+    fg_objects_.push_back(new GameObject(glm::vec3(0.0f, -2.0f, 0.0f), tex_[17], size_, "hud_arrow"));
     
     // Setup background
     for (int i = 0; i < 50; i++) {
@@ -259,8 +259,8 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[12], (resources_directory_g + std::string("/textures/heart_1.png")).c_str());
     SetTexture(tex_[13], (resources_directory_g + std::string("/textures/heart_2.png")).c_str());
     SetTexture(tex_[14], (resources_directory_g + std::string("/textures/heart_3.png")).c_str());
-    SetTexture(tex_[15], (resources_directory_g + std::string("/textures/progressbar.png")).c_str());
-    SetTexture(tex_[16], (resources_directory_g + std::string("/textures/progressbar_arrow.png")).c_str());
+    SetTexture(tex_[16], (resources_directory_g + std::string("/textures/progressbar.png")).c_str());
+    SetTexture(tex_[17], (resources_directory_g + std::string("/textures/progressbar_arrow.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
