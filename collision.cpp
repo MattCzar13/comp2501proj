@@ -159,10 +159,10 @@ namespace game {
         else if (tag1 == "plane" && tag2 == "player") {
             return 1;
         }
-        else if (tag1 == "plane" && tag2 == "bullet") {
+        else if (tag1 == "plane" && tag2 == "bullet_p") {
             return 1;
         }
-        else if (tag1 == "bullet" && tag2 == "plane") {
+        else if (tag1 == "bullet_p" && tag2 == "plane") {
             return 1;
         }
         else if (tag1 == "player" && tag2 == "health") {
@@ -187,13 +187,13 @@ namespace game {
         else if (tag1 == "plane" && tag2 == "player") {
             printf("collision between plane and player\n");
         }
-        else if (tag1 == "bullet" && tag2 == "plane") {
+        else if (tag1 == "bullet_p" && tag2 == "plane") {
             printf("collision between bullet and plane\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
 
         }
-        else if (tag1 == "plane" && tag2 == "bullet") {
+        else if (tag1 == "plane" && tag2 == "bullet_p") {
             printf("collision between plane and bullet\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));

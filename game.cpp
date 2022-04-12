@@ -304,7 +304,10 @@ void Game::SpawnEnemies() {
     if (glfwGetTime() > spawnTimer_) {
         spawnTimer_ += 5;
 
-        game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+8.0f, 0.0f), tex_[1], size_, "plane"));
+        GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[1], size_, "plane");
+        enemy->SetAngle(180);
+        game_objects_.push_back(enemy);
+
         printf("[!] SPAWNED A NEW ENEMY PLANE\n");
     }
 
@@ -312,12 +315,21 @@ void Game::SpawnEnemies() {
 
 void Game::SpawnBullet(GameObject* plane) {
 
+    std::string bulletTag;
+
+    if (plane->GetTag() == "player") {
+        bulletTag = "bullet_p";
+    }
+    else if (plane->GetTag() == "plane") {
+        bulletTag = "bullet_e";
+    }
+
     if (plane->GetTime() < glfwGetTime()) {
-        GameObject* bullet = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[4], size_, "bullet");
+        GameObject* bullet = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[4], size_, bulletTag);
         bullet->SetPosition(plane->GetPosition());
         bullet->SetAngle(0);
         bullet->SetScale(0.5);
-        bullet->SetVelocity((glm::vec3((10 * cos((bullet->GetAngle() + 90) * ((atan(1) * 4)) / 180)), 10 * sin((bullet->GetAngle() + 90) * ((atan(1) * 4)) / 180), 0)));
+        bullet->SetVelocity((glm::vec3((10 * cos((plane->GetAngle() + 90) * ((atan(1) * 4)) / 180)), 10 * sin((plane->GetAngle() + 90) * ((atan(1) * 4)) / 180), 0)));
         game_objects_.push_back(bullet);
         plane->SetTime(0);
     }
@@ -377,15 +389,17 @@ void Game::Update(double delta_time)
             game_objects_.erase(game_objects_.begin() + i);
         }
 
-        //set the positon of enemy
+        // Update enemy
         if (current_game_object->GetTag() == "plane") {
             float distance_p_p = glm::length(current_game_object->GetPosition() - game_objects_[0]->GetPosition());
             if (distance_p_p < 9) {
                 current_game_object->SetPosition(current_game_object->GetPosition() + glm::vec3(0, -0.01, 0));
             }
+
+            SpawnBullet(current_game_object);
         }
 
-        //switch weapon
+        // Switch weapon
         if (current_game_object->GetTag() == "bullet" & !shoot) {
             current_game_object->SetTex(tex_[3+type_weapon]);
         }
