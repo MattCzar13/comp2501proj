@@ -202,53 +202,57 @@ namespace game {
         std::string tag1 = current_game_object->GetTag();
         std::string tag2 = other_game_object->GetTag();
 
-        if (tag1 == "player" && tag2 == "plane") {
-            printf("collision between player and plane\n");
+        if (tag1 == "player" && (tag2 == "plane" || tag2 == "plane2" || tag2 == "plane3" || tag2 == "plane4")) {
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
+            player->subtractHealth(1);
+            other_game_object->SetPosition(glm::vec3(100, 0, 0));
         }
-        else if (tag1 == "plane" && tag2 == "player") {
-            printf("collision between plane and player\n");
+        else if ((tag2 == "plane" || tag2 == "plane2" || tag2 == "plane3" || tag2 == "plane4") && tag2 == "player") {
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(other_game_object);
+            player->subtractHealth(1);
+            current_game_object->SetPosition(glm::vec3(100, 0, 0));
         }
         else if (tag1 == "bullet_p" && tag2 == "plane") {
-            printf("collision between bullet and plane\n");
+            //printf("collision between bullet and plane\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
 
         }
         else if (tag1 == "bullet_p" && tag2 == "plane2") {
-            printf("collision between bullet and plane\n");
+            //printf("collision between bullet and plane\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
 
         }
         else if (tag1 == "bullet_p" && tag2 == "plane3") {
-            printf("collision between bullet and plane\n");
+            //printf("collision between bullet and plane\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
 
         }
         else if (tag1 == "bullet_p" && tag2 == "plane4") {
-            printf("collision between bullet and plane\n");
+            //printf("collision between bullet and plane\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
 
         }
         else if (tag1 == "plane" && tag2 == "bullet_p") {
-            printf("collision between plane and bullet\n");
+            //printf("collision between plane and bullet\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
         }
         else if (tag1 == "plane2" && tag2 == "bullet_p") {
-            printf("collision between plane and bullet\n");
+            //printf("collision between plane and bullet\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
         }
         else if (tag1 == "plane3" && tag2 == "bullet_p") {
-            printf("collision between plane and bullet\n");
+            //printf("collision between plane and bullet\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
         }
         else if (tag1 == "plane4" && tag2 == "bullet_p") {
-            printf("collision between plane and bullet\n");
+            //printf("collision between plane and bullet\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
         }
