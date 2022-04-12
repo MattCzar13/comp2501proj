@@ -51,6 +51,12 @@ namespace game {
             // List of game objects
             std::vector<GameObject*> game_objects_;
 
+            // List of background objects
+            std::vector<GameObject*> bg_objects_;
+
+            // List of foreground objects
+            std::vector<GameObject*> fg_objects_;
+
             // Callback for when the window is resized
             static void ResizeCallback(GLFWwindow* window, int width, int height);
 
@@ -68,6 +74,10 @@ namespace game {
 
             // Update the game based on user input and simulation
             void Update(double delta_time);
+
+            // Function that handles enemy spawning
+            void HandleSpawning(void);
+            double spawnTimer_ = 1;
 
     }; // class Game
 

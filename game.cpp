@@ -100,14 +100,6 @@ void Game::Setup(void)
     //setup bullet
     game_objects_.push_back(new GameObject(glm::vec3(100.0f, 0.0f, 0.0f), tex_[4], size_, "bullet"));
     
-    // Setup other objects
-    game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 10.0f, 0.0f), tex_[1], size_, "plane"));
-    game_objects_.push_back(new GameObject(glm::vec3(1.0f, 15.5f, 0.0f), tex_[2], size_, "plane"));
-    game_objects_.push_back(new GameObject(glm::vec3(2.0f, 8.0f, 0.0f), tex_[1], size_, "plane"));
-    game_objects_.push_back(new GameObject(glm::vec3(-2.0f, 25.5f, 0.0f), tex_[2], size_, "plane"));
-
-    
-    
     // Setup background
     for (int i = 0; i < 50; i++) {
         GameObject* background = new GameObject(glm::vec3(0.0f, i, 0.0f), tex_[3], size_, "ground");
@@ -309,6 +301,17 @@ void Game::Controls(void)
     }
 }
 
+void Game::HandleSpawning() {
+
+    if (glfwGetTime() > spawnTimer_) {
+        spawnTimer_ += 2;
+
+        game_objects_.push_back(new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1]+1.0f, 0.0f), tex_[1], size_, "plane"));
+        printf("[!] SPAWNED A NEW ENEMY PLANE\n");
+    }
+
+}
+
 
 void Game::Update(double delta_time)
 {
@@ -318,11 +321,20 @@ void Game::Update(double delta_time)
 
     CheckAllCollisions(game_objects_, delta_time);
 
+    HandleSpawning();
+
     // Update and render all game objects
     for (int i = 0; i < game_objects_.size(); i++) {
 
         // Get the current game object
         GameObject* current_game_object = game_objects_[i];
+
+        // leave ground for last, because of how z ordering works
+        /*
+        if (current_game_object->GetTag() == "ground") {
+            continue;
+        }
+        */
 
         //set the position of bullet
         if (current_game_object->GetTag() == "bullet" & shoot) {
