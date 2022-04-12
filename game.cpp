@@ -106,6 +106,12 @@ void Game::Setup(void)
     //spawn some powerups
     //game_objects_.push_back(new GameObject(glm::vec3(-1.0f, 7.0f, 0.0f), tex_[6], size_, "health"));
     //game_objects_.push_back(new GameObject(glm::vec3(1.0f, 8.0f, 0.0f), tex_[7], size_, "shield"));
+
+    // Setup hud
+    GameObject* hud = new GameObject(glm::vec3(0.0f, -1.0f, 0.0f), tex_[15], size_, "hud_bar");
+    hud->SetScale(5.0f);
+    fg_objects_.push_back(hud);
+    fg_objects_.push_back(new GameObject(glm::vec3(0.0f, -2.0f, 0.0f), tex_[16], size_, "hud_arrow"));
     
     // Setup background
     for (int i = 0; i < 50; i++) {
@@ -253,6 +259,8 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[12], (resources_directory_g + std::string("/textures/heart_1.png")).c_str());
     SetTexture(tex_[13], (resources_directory_g + std::string("/textures/heart_2.png")).c_str());
     SetTexture(tex_[14], (resources_directory_g + std::string("/textures/heart_3.png")).c_str());
+    SetTexture(tex_[15], (resources_directory_g + std::string("/textures/progressbar.png")).c_str());
+    SetTexture(tex_[16], (resources_directory_g + std::string("/textures/progressbar_arrow.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
@@ -332,7 +340,7 @@ void Game::SpawnEnemies() {
             printf("[!] SPAWNED A NEW ENEMY PLANE2 (SPINNER)\n");
         }
         else if(randomNum > 15) {
-            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane3");
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[10], size_, "plane");
             enemy->SetVelocity(glm::vec3(0,0.06,0));
             enemy->SetAngle(180);
             game_objects_.push_back(enemy);
@@ -433,6 +441,15 @@ void Game::Update(double delta_time)
 
     for (int i = 0; i < fg_objects_.size(); i++) {
         GameObject* current_game_object = fg_objects_[i];
+
+        current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], game_objects_[0]->GetPosition()[1], 0.0f));
+
+        if (current_game_object->GetTag() == "hud_bar") {
+            current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 0.5, 0.0f));
+        }
+        if (current_game_object->GetTag() == "hud_arrow") {
+            current_game_object->SetPosition(glm::vec3((game_objects_[0]->GetPosition()[1] / 120) - 2.2, current_game_object->GetPosition()[1] - 1, 0.0f));
+        }
 
         current_game_object->Render(shader_);
     }
