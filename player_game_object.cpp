@@ -48,6 +48,9 @@ void PlayerGameObject::Update(double delta_time) {
 	GameObject::Update(delta_time);
 
 	//std::printf("Health: %d, Shield timer: %f\n", health_, shield_timer_);
+
+	// Make the player not slide around on the x axis
+	velocity_.x = 0;
 }
 
 // Update function for moving the player object around

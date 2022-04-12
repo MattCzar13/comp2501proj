@@ -94,6 +94,8 @@ void Game::Setup(void)
     // Load textures
     SetAllTextures();
 
+    state = "game";
+
     // Setup the player object (position, texture, vertex count)
     // Note that, in this specific implementation, the player object should always be the first object in the game object vector 
     game_objects_.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[0], size_, "player", tex_[15]));
@@ -322,18 +324,18 @@ void Game::Controls(void)
         }
     }
     if (glfwGetKey(window_, GLFW_KEY_D) == GLFW_PRESS) {
-        newPos = curpos + glm::vec3(0.03, 0, 0);
-        if (newPos[0] > 2.5) {
-            newPos[0] = 2.5;
+        player->SetVelocity(glm::vec3(2.0f, player->GetVelocity()[1], 0.0f));
+
+        if ((player->GetPosition()[0] + 2.0f) > 4.5) {
+            player->SetVelocity(curvel);
         }
-        player->SetPosition(newPos);
     }
     if (glfwGetKey(window_, GLFW_KEY_A) == GLFW_PRESS) {
-        newPos = curpos + glm::vec3(-0.03, 0, 0);
-        if (newPos[0] < -2.5) {
-            newPos[0] = -2.5;
+        player->SetVelocity(glm::vec3(-2.0f, player->GetVelocity()[1], 0.0f));
+
+        if ((player->GetPosition()[0] - 2.0f) < -4.5) {
+            player->SetVelocity(curvel);
         }
-        player->SetPosition(newPos);
     }
     if (glfwGetKey(window_, GLFW_KEY_SPACE) == GLFW_PRESS) {
 
@@ -371,6 +373,16 @@ void Game::Controls(void)
         }
         //switch wepond mode
     }
+
+    // debug tools
+    if (glfwGetKey(window_, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS) {
+        player->SetPosition(glm::vec3(0.0f, player->GetPosition()[1] - 1, 0.0f));
+        printf("[?] Moving player backwards...\n");
+    }
+    if (glfwGetKey(window_, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS) {
+        player->SetPosition(glm::vec3(0.0f, player->GetPosition()[1] + 1, 0.0f));
+        printf("[?] Moving player forwards...\n");
+    }
 }
 
 void Game::SpawnEnemies() {
@@ -378,8 +390,19 @@ void Game::SpawnEnemies() {
     if (glfwGetTime() > enemySpawnTimer_) {
         enemySpawnTimer_ += 2;
 
+        // if the player is fighting the boss, no other enemies should spawn
+        if (state == "boss") {
+            return;
+        }
+
+        // if the player enters the "boss area", prep the boss fight and change the game state to "boss"
         if (game_objects_[0]->GetPosition()[1] > 300) {
-            printf("[!] IN BOSS TERRITORY\n");
+            printf("[!] SPAWNED THE BOSS\n");
+            state = "boss";
+            GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 5.0f, 0.0f), tex_[11], size_, "planeboss");
+            enemy->SetAngle(180);
+            enemy->SetROF(0.5);
+            game_objects_.push_back(enemy);
         }
 
         int randomNum = rand() % 100 + 1;
@@ -446,7 +469,7 @@ void Game::SpawnBullet(GameObject* plane, int speed) {
     if (plane->GetTag() == "player") {
         bulletTag = "bullet_p";
     }
-    else if (plane->GetTag() == "plane" || plane->GetTag() == "plane2" || plane->GetTag() == "plane3" || plane->GetTag() == "plane4") {
+    else if (plane->GetTag() == "plane" || plane->GetTag() == "plane2" || plane->GetTag() == "plane3" || plane->GetTag() == "plane4" || plane->GetTag() == "planeboss") {
         bulletTag = "bullet_e";
     }
 
@@ -588,6 +611,11 @@ void Game::Update(double delta_time)
             current_game_object->SetAngle(current_game_object->GetAngle() + 180);
             SpawnBullet(current_game_object, 2);
             current_game_object->SetAngle(current_game_object->GetAngle() - 90);
+        }
+        else if (current_game_object->GetTag() == "planeboss") {
+            current_game_object->SetPosition(glm::vec3(cos(glfwGetTime()) * 2.0, current_game_object->GetPosition()[1], 0));
+            current_game_object->SetVelocity(glm::vec3(0.0f, game_objects_[0]->GetVelocity()[1], 0.0f));
+            SpawnBullet(current_game_object, 2);
         }
 
         if (current_game_object->GetTag() == "heart") {

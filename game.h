@@ -44,6 +44,9 @@ namespace game {
             bool shoot = false;
             int type_weapon = 1;
 
+            // game state
+            std::string state;
+
             // References to textures
 #define NUM_TEXTURES 30
             GLuint tex_[NUM_TEXTURES];
