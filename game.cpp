@@ -380,6 +380,10 @@ void Game::SpawnEnemies() {
     if (glfwGetTime() > enemySpawnTimer_) {
         enemySpawnTimer_ += 2;
 
+        if (game_objects_[0]->GetPosition()[1] > 300) {
+            printf("[!] IN BOSS TERRITORY\n");
+        }
+
         int randomNum = rand() % 100 + 1;
         float x = rand() % 5 - 1.5;
         //x = 2.5;
