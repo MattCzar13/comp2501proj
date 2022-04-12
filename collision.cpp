@@ -160,10 +160,10 @@ namespace game {
             return 1;
         }
         else if (tag1 == "plane" && tag2 == "bullet") {
-            return 3;
+            return 1;
         }
         else if (tag1 == "bullet" && tag2 == "plane") {
-            return 2;
+            return 1;
         }
       
 
