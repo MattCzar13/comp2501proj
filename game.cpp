@@ -369,7 +369,7 @@ void Game::SpawnBullet(GameObject* plane, int speed) {
     if (plane->GetTag() == "player") {
         bulletTag = "bullet_p";
     }
-    else if (plane->GetTag() == "plane") {
+    else if (plane->GetTag() == "plane" || plane->GetTag() == "plane2" || plane->GetTag() == "plane3" ) {
         bulletTag = "bullet_e";
     }
 
