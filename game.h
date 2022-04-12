@@ -82,6 +82,9 @@ namespace game {
             // Function that checks if an object is outside of the viewport
             bool CheckOutOfBounds(GameObject* object);
 
+            // Function that handles bullet spawning, automatically assumes whether the object is a player or enemy
+            void SpawnBullet(GameObject* plane);
+
     }; // class Game
 
 } // namespace game

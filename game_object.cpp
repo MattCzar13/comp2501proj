@@ -16,6 +16,10 @@ GameObject::GameObject(const glm::vec3 &position, GLuint texture, GLint num_elem
     texture_ = texture;
     radius_ = 0.5;
 
+    angle_ = 0.0f;
+    time_ = 0;
+    rof_ = 0.4;
+
 }
 
 
