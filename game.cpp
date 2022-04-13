@@ -438,9 +438,10 @@ void Game::SpawnEnemies() {
             game_objects_.push_back(enemy);
         }
 
+        //geting a random number to determin what type of enemy is spawned
         int randomNum = rand() % 100 + 1;
+        //geting a random x value for the enemy
         float x = rand() % 5 - 1.5;
-        //x = 2.5;
 
         if (randomNum > 50) {
             GameObject* enemy = new GameObject(glm::vec3(x, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[8], size_, "plane");
@@ -486,6 +487,7 @@ void Game::SpawnPowerups() {
             return;
         }
 
+        //geting a random number do determin what powerup should be spawned
         if ((rand() % 100 + 1) > 50) {
             game_objects_.push_back(new GameObject(glm::vec3(rand() % 5 - 1.5, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[6], size_, "health"));
             printf("[!] SPAWNED A NEW HEALTH PICKUP\n");
@@ -503,7 +505,7 @@ void Game::SpawnPowerups() {
 void Game::SpawnBullet(GameObject* plane, int speed) {
 
     std::string bulletTag;
-    int textureNumber;
+    int textureNumber =24;
 
     //checkign what type of bullet to add
     if (plane->GetTag() == "player") {
@@ -522,7 +524,9 @@ void Game::SpawnBullet(GameObject* plane, int speed) {
         textureNumber = 24;
     }
 
+    //checking if the plane or player is ready to spawn a new bullet
     if (plane->GetTime() < glfwGetTime()) {
+        //seting all atributes of the bullet
         GameObject* bullet = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[textureNumber], size_, bulletTag);
         bullet->SetPosition(plane->GetPosition());
         bullet->SetAngle(plane->GetAngle());
