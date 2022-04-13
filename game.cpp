@@ -406,21 +406,12 @@ void Game::Controls(void)
 
     }
     if (glfwGetKey(window_, GLFW_KEY_E) == GLFW_PRESS) {
-        if (player->GetWeaponType() == 1) {
-            player->setWeaponType(2);
-        }
-        else {
-            player->setWeaponType(1);
-        }
+        player->setWeaponType(2);
         //switch wepond mode
     }
     if (glfwGetKey(window_, GLFW_KEY_Q) == GLFW_PRESS) {
-        if (player->GetWeaponType() == 1) {
-            player->setWeaponType(2);
-        }
-        else {
-            player->setWeaponType(1);
-        }
+
+        player->setWeaponType(1);
         //switch wepond mode
     }
 }
