@@ -38,6 +38,7 @@ namespace game {
             inline double GetTime(void) { return time_; }
             inline double GetROF(void) { return rof_; }
             inline double GetAngle(void) { return angle_; }
+            inline int getHealth(void) { return health_; }
 
             // Setters
             inline void SetPosition(const glm::vec3& position) { position_ = position; }
@@ -46,7 +47,8 @@ namespace game {
             inline void SetTime(double time) { time_ = time; }
             inline void SetROF(double rof) { rof_ = rof; }
             inline void SetAngle(double angle) { angle_ = angle; }
-
+            inline void addHealth(int h) { health_ += h; }
+            inline void subtractHealth(int h) { health_ -= h; }
 
             inline void SetVelocity(const glm::vec3& velocity) { velocity_ = velocity; }
 
@@ -76,6 +78,7 @@ namespace game {
             std::string tag_;
             double time_;
             double rof_;
+            int health_ = 1;
 
             // Object's texture reference
             GLuint texture_;

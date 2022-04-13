@@ -398,12 +398,14 @@ void Game::SpawnEnemies() {
         }
 
         // if the player enters the "boss area", prep the boss fight and change the game state to "boss"
-        if (game_objects_[0]->GetPosition()[1] > 300) {
+        if (game_objects_[0]->GetPosition()[1] > 440) {
             printf("[!] SPAWNED THE BOSS\n");
             state = "boss";
             GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 5.0f, 0.0f), tex_[11], size_, "planeboss");
             enemy->SetAngle(180);
             enemy->SetROF(0.5);
+            enemy->SetScale(2.0f);
+            enemy->addHealth(10);
             game_objects_.push_back(enemy);
         }
 

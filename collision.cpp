@@ -171,6 +171,9 @@ namespace game {
         else if (tag1 == "plane4" && tag2 == "bullet_p") {
             return 1;
         }
+        else if (tag1 == "planeboss" && tag2 == "bullet_p") {
+            return 1;
+        }
         else if (tag1 == "bullet_p" && tag2 == "plane") {
             return 1;
         }
@@ -181,6 +184,9 @@ namespace game {
             return 1;
         }
         else if (tag1 == "bullet_p" && tag2 == "plane4") {
+            return 1;
+        }
+        else if (tag1 == "bullet_p" && tag2 == "planeboss") {
             return 1;
         }
         else if (tag1 == "player" && tag2 == "health") {
@@ -236,6 +242,17 @@ namespace game {
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
 
         }
+        else if (tag1 == "bullet_p" && tag2 == "planeboss") {
+            //printf("collision between bullet and plane\n");
+
+            current_game_object->SetPosition(glm::vec3(-100, 0, 0));
+            other_game_object->subtractHealth(1);
+
+            if (other_game_object->getHealth() <= 0) {
+                other_game_object->SetPosition(glm::vec3(100, 0, 0));
+            }
+
+        }
         else if (tag1 == "plane" && tag2 == "bullet_p") {
             //printf("collision between plane and bullet\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
@@ -255,6 +272,16 @@ namespace game {
             //printf("collision between plane and bullet\n");
             other_game_object->SetPosition(glm::vec3(100, 0, 0));
             current_game_object->SetPosition(glm::vec3(-100, 0, 0));
+        }
+        else if (tag1 == "planeboss" && tag2 == "bullet_p") {
+            //printf("collision between plane and bullet\n");
+
+            other_game_object->SetPosition(glm::vec3(-100, 0, 0));
+            current_game_object->subtractHealth(1);
+
+            if (current_game_object->getHealth() <= 0) {
+                current_game_object->SetPosition(glm::vec3(100, 0, 0));
+            }
         }
         else if (tag1 == "player" && tag2 == "health") {
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
