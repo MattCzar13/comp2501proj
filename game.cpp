@@ -443,6 +443,8 @@ void Game::SpawnEnemies() {
         //geting a random x value for the enemy
         float x = rand() % 5 - 1.5;
 
+        // Depending on the random number, we spawn a certain enemy
+        // We use the random number as a sort of "rarity" meter. Rare enemies have a smaller number range to be picked
         if (randomNum > 50) {
             GameObject* enemy = new GameObject(glm::vec3(x, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[8], size_, "plane");
             enemy->SetAngle(180);
