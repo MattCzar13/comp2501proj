@@ -315,6 +315,8 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[24], (resources_directory_g + std::string("/textures/bullet_orange.png")).c_str());
     SetTexture(tex_[25], (resources_directory_g + std::string("/textures/title_win.png")).c_str());
     SetTexture(tex_[26], (resources_directory_g + std::string("/textures/title_lose.png")).c_str());
+    SetTexture(tex_[27], (resources_directory_g + std::string("/textures/indicator_1.png")).c_str());
+    SetTexture(tex_[28], (resources_directory_g + std::string("/textures/indicator_2.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
