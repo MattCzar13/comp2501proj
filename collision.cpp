@@ -153,6 +153,7 @@ namespace game {
 
     int CheckCollisionType(std::string tag1, std::string tag2) {
 
+        //checking for any combination of objects that might collide
         if (tag1 == "player" && tag2 == "plane") {
             return 1;
         }
@@ -208,6 +209,7 @@ namespace game {
         std::string tag1 = current_game_object->GetTag();
         std::string tag2 = other_game_object->GetTag();
 
+        //checking for combinations of objects and performing appropriate responce 
         if (tag1 == "player" && (tag2 == "plane" || tag2 == "plane2" || tag2 == "plane3" || tag2 == "plane4")) {
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
             player->subtractHealth(1);

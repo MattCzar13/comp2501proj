@@ -505,6 +505,7 @@ void Game::SpawnBullet(GameObject* plane, int speed) {
     std::string bulletTag;
     int textureNumber;
 
+    //checkign what type of bullet to add
     if (plane->GetTag() == "player") {
         bulletTag = "bullet_p";
         PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
@@ -690,6 +691,8 @@ void Game::Update(double delta_time)
             SpawnBullet(current_game_object, 2);
         }
         else if (current_game_object->GetTag() == "plane2") {
+            //rotateing the enemy 90 degrees each time a bullet is spawned
+            //this happens 4 times so it will bring the player back to where they started
             double time = current_game_object->GetTime();
             current_game_object->SetAngle(current_game_object->GetAngle() + 90);
             SpawnBullet(current_game_object, 2);
