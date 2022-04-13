@@ -10,7 +10,6 @@ set(HDRS
     game.h
     game_object.h
     player_game_object.h
-    enemy_game_object.h
     collision.h
     shader.h
 )
@@ -22,7 +21,6 @@ set(SRCS
     main.cpp
     player_game_object.cpp
     shader.cpp
-    enemy_game_object.cpp
     collision.cpp
     vertex_shader.glsl
     fragment_shader.glsl

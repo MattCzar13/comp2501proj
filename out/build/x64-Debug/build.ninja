@@ -91,14 +91,6 @@ build CMakeFiles\GameDemo.dir\shader.cpp.obj: CXX_COMPILER__GameDemo_Debug ..\..
   TARGET_COMPILE_PDB = CMakeFiles\GameDemo.dir\
   TARGET_PDB = GameDemo_d.pdb
 
-build CMakeFiles\GameDemo.dir\enemy_game_object.cpp.obj: CXX_COMPILER__GameDemo_Debug ..\..\..\enemy_game_object.cpp || cmake_object_order_depends_target_GameDemo
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
-  INCLUDES = -I. -I"D:\Documents\Important\Year 2, Semester 2\COMP2501-A\Shared\Libraries\include"
-  OBJECT_DIR = CMakeFiles\GameDemo.dir
-  OBJECT_FILE_DIR = CMakeFiles\GameDemo.dir
-  TARGET_COMPILE_PDB = CMakeFiles\GameDemo.dir\
-  TARGET_PDB = GameDemo_d.pdb
-
 build CMakeFiles\GameDemo.dir\collision.cpp.obj: CXX_COMPILER__GameDemo_Debug ..\..\..\collision.cpp || cmake_object_order_depends_target_GameDemo
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   INCLUDES = -I. -I"D:\Documents\Important\Year 2, Semester 2\COMP2501-A\Shared\Libraries\include"
@@ -115,7 +107,7 @@ build CMakeFiles\GameDemo.dir\collision.cpp.obj: CXX_COMPILER__GameDemo_Debug ..
 #############################################
 # Link the executable GameDemo_d.exe
 
-build GameDemo_d.exe: CXX_EXECUTABLE_LINKER__GameDemo_Debug CMakeFiles\GameDemo.dir\file_utils.cpp.obj CMakeFiles\GameDemo.dir\game.cpp.obj CMakeFiles\GameDemo.dir\game_object.cpp.obj CMakeFiles\GameDemo.dir\main.cpp.obj CMakeFiles\GameDemo.dir\player_game_object.cpp.obj CMakeFiles\GameDemo.dir\shader.cpp.obj CMakeFiles\GameDemo.dir\enemy_game_object.cpp.obj CMakeFiles\GameDemo.dir\collision.cpp.obj | D$:\Documents\Important\Year$ 2,$ Semester$ 2\COMP2501-A\Shared\Libraries\lib\glew32s.lib D$:\Documents\Important\Year$ 2,$ Semester$ 2\COMP2501-A\Shared\Libraries\lib\glfw3.lib D$:\Documents\Important\Year$ 2,$ Semester$ 2\COMP2501-A\Shared\Libraries\lib\SOIL.lib
+build GameDemo_d.exe: CXX_EXECUTABLE_LINKER__GameDemo_Debug CMakeFiles\GameDemo.dir\file_utils.cpp.obj CMakeFiles\GameDemo.dir\game.cpp.obj CMakeFiles\GameDemo.dir\game_object.cpp.obj CMakeFiles\GameDemo.dir\main.cpp.obj CMakeFiles\GameDemo.dir\player_game_object.cpp.obj CMakeFiles\GameDemo.dir\shader.cpp.obj CMakeFiles\GameDemo.dir\collision.cpp.obj | D$:\Documents\Important\Year$ 2,$ Semester$ 2\COMP2501-A\Shared\Libraries\lib\glew32s.lib D$:\Documents\Important\Year$ 2,$ Semester$ 2\COMP2501-A\Shared\Libraries\lib\glfw3.lib D$:\Documents\Important\Year$ 2,$ Semester$ 2\COMP2501-A\Shared\Libraries\lib\SOIL.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = opengl32.lib  "D:\Documents\Important\Year 2, Semester 2\COMP2501-A\Shared\Libraries\lib\glew32s.lib"  "D:\Documents\Important\Year 2, Semester 2\COMP2501-A\Shared\Libraries\lib\glfw3.lib"  "D:\Documents\Important\Year 2, Semester 2\COMP2501-A\Shared\Libraries\lib\SOIL.lib"  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
