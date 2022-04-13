@@ -138,6 +138,12 @@ void Game::Setup(void)
     hud = new GameObject(glm::vec3(0.0f, 1.0f, 0.0f), tex_[26], size_, "title_lose");
     hud->SetScale(0.0f);
     fg_objects_.push_back(hud);
+    hud = new GameObject(glm::vec3(-2.0f, 6.0f, 0.0f), tex_[27], size_, "indicator1");
+    hud->SetScale(0.5f);
+    fg_objects_.push_back(hud);
+    hud = new GameObject(glm::vec3(-2.0f, 6.0f, 0.0f), tex_[28], size_, "indicator2");
+    hud->SetScale(0.5f);
+    fg_objects_.push_back(hud);
     
     int texnumber = 3;
 
@@ -602,7 +608,7 @@ void Game::Update(double delta_time)
             else {
                 current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 3, 0.0f));
             }
-            
+
         }
         if (current_game_object->GetTag() == "hud_bar") {
             if (state == "win") {
@@ -611,7 +617,7 @@ void Game::Update(double delta_time)
             if (state != "lose") {
                 current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 0.5, 0.0f));
             }
-            
+
         }
         if (current_game_object->GetTag() == "hud_arrow") {
             if (state == "win") {
@@ -629,6 +635,28 @@ void Game::Update(double delta_time)
         }
         if (current_game_object->GetTag() == "title_lose" && state == "lose") {
             current_game_object->SetScale(5.0f);
+        }
+        if (current_game_object->GetTag() == "indicator1") {
+            current_game_object->SetPosition(glm::vec3(-2.6f, current_game_object->GetPosition()[1] + 5.5f, 0.0f));
+
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
+            if (player->GetWeaponType() == 1) {
+                current_game_object->SetScale(0.5f);
+            }
+            else if (player->GetWeaponType() == 2) {
+                current_game_object->SetScale(0.0f);
+            }
+        }
+        if (current_game_object->GetTag() == "indicator2") {
+            current_game_object->SetPosition(glm::vec3(-2.6f, current_game_object->GetPosition()[1] + 5.5f, 0.0f));
+
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
+            if (player->GetWeaponType() == 1) {
+                current_game_object->SetScale(0.0f);
+            }
+            else if (player->GetWeaponType() == 2) {
+                current_game_object->SetScale(0.5f);
+            }
         }
 
         current_game_object->Render(shader_);
