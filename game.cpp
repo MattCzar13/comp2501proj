@@ -507,7 +507,7 @@ void Game::SpawnBullet(GameObject* plane, int speed) {
     std::string bulletTag;
     int textureNumber =24;
 
-    //checkign what type of bullet to add
+    //checking what type of bullet to add
     if (plane->GetTag() == "player") {
         bulletTag = "bullet_p";
         PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
@@ -526,7 +526,7 @@ void Game::SpawnBullet(GameObject* plane, int speed) {
 
     //checking if the plane or player is ready to spawn a new bullet
     if (plane->GetTime() < glfwGetTime()) {
-        //seting all atributes of the bullet
+        //seting all attributes of the bullet
         GameObject* bullet = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex_[textureNumber], size_, bulletTag);
         bullet->SetPosition(plane->GetPosition());
         bullet->SetAngle(plane->GetAngle());

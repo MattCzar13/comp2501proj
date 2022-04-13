@@ -210,6 +210,8 @@ namespace game {
         std::string tag2 = other_game_object->GetTag();
 
         //checking for combinations of objects and performing appropriate responce 
+        //if the object needs to be despawned it is moved far of the screan so it is removed in the update function when
+        //it is checked if it is out of bounds
         if (tag1 == "player" && (tag2 == "plane" || tag2 == "plane2" || tag2 == "plane3" || tag2 == "plane4")) {
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
             player->subtractHealth(1);
