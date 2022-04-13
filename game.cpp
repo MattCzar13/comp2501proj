@@ -132,6 +132,12 @@ void Game::Setup(void)
     hud = new GameObject(glm::vec3(0.0f, -2.0f, 0.0f), tex_[17], size_, "hud_arrow");
     hud->SetScale(0.5f);
     fg_objects_.push_back(hud);
+    hud = new GameObject(glm::vec3(0.0f, 1.0f, 0.0f), tex_[25], size_, "title_win");
+    hud->SetScale(0.0f);
+    fg_objects_.push_back(hud);
+    hud = new GameObject(glm::vec3(0.0f, 1.0f, 0.0f), tex_[26], size_, "title_lose");
+    hud->SetScale(0.0f);
+    fg_objects_.push_back(hud);
     
     int texnumber = 3;
 
@@ -307,6 +313,8 @@ void Game::SetAllTextures(void)
     SetTexture(tex_[22], (resources_directory_g + std::string("/textures/title.png")).c_str());
     SetTexture(tex_[23], (resources_directory_g + std::string("/textures/bullet_green.png")).c_str());
     SetTexture(tex_[24], (resources_directory_g + std::string("/textures/bullet_orange.png")).c_str());
+    SetTexture(tex_[25], (resources_directory_g + std::string("/textures/title_win.png")).c_str());
+    SetTexture(tex_[26], (resources_directory_g + std::string("/textures/title_lose.png")).c_str());
     
 
     glBindTexture(GL_TEXTURE_2D, tex_[0]);
@@ -333,6 +341,11 @@ void Game::Controls(void)
     if (glfwGetKey(window_, GLFW_KEY_BACKSLASH) == GLFW_PRESS) {
         player->addShieldTimer(60);
         printf("[?] Giving player 60 seconds of invincibility...\n");
+    }
+
+    if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        printf("[?] Closing game...\n");
+        glfwSetWindowShouldClose(window_, true);
     }
 
     // if the player won or lost, skip the rest of these inputs
@@ -608,6 +621,12 @@ void Game::Update(double delta_time)
                     current_game_object->SetPosition(glm::vec3(2.2, current_game_object->GetPosition()[1], 0.0f));
                 }
             }
+        }
+        if (current_game_object->GetTag() == "title_win" && state == "win") {
+            current_game_object->SetScale(5.0f);
+        }
+        if (current_game_object->GetTag() == "title_lose" && state == "lose") {
+            current_game_object->SetScale(5.0f);
         }
 
         current_game_object->Render(shader_);
