@@ -576,6 +576,9 @@ void Game::Update(double delta_time)
     }
 
     // Main iteration
+    // This is where all three layers of objects are iterated upon individually
+    // There are three layers: Foreground, middleground, and background 
+    // Each have different rules for how they are handled
 
     // [1] FOREGROUND FG_OBJECTS_ (Heads up display)
 
@@ -592,29 +595,35 @@ void Game::Update(double delta_time)
             // if the game has "started", make the title slide off screen and then die
             if (game_objects_[0]->GetPosition()[1] > 5) {
                 current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0] * 1.1, current_game_object->GetPosition()[1] + 3, 0.0f));
+                // This kills the title card when it's out of bounds
                 if (CheckOutOfBounds(current_game_object)) {
                     printf("[X] Removed title object\n");
                     fg_objects_.erase(fg_objects_.begin() + i);
                 }
             }
             else {
+                // If the player hasn't moved enough yet, keep the title card on screen
                 current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 3, 0.0f));
             }
 
         }
         if (current_game_object->GetTag() == "hud_bar") {
+            // If the player won, stop moving the bar
             if (state == "win") {
                 continue;
             }
+            // If the player is still in gameplay, keep the hud on the screen
             if (state != "lose") {
                 current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 0.5, 0.0f));
             }
 
         }
         if (current_game_object->GetTag() == "hud_arrow") {
+            // If the player won, stop moving the arrow
             if (state == "win") {
                 continue;
             }
+            // If the player is still in gameplay, keep the hud on the screen
             if (state != "lose") {
                 current_game_object->SetPosition(glm::vec3((game_objects_[0]->GetPosition()[1] / 100) - 2.2, current_game_object->GetPosition()[1] - 1.2, 0.0f));
                 if (current_game_object->GetPosition()[0] > 2.2) {
@@ -622,15 +631,22 @@ void Game::Update(double delta_time)
                 }
             }
         }
+        // If the player won, show the win message
         if (current_game_object->GetTag() == "title_win" && state == "win") {
             current_game_object->SetScale(5.0f);
         }
+        // If the player lost, show the lose message
         if (current_game_object->GetTag() == "title_lose" && state == "lose") {
             current_game_object->SetScale(5.0f);
         }
+
+        // Manage the weapon indicator in the top left
+        // It's actually two indicators, but only one is shown at a time
+        // One represents Weapon 1, one represents Weapon 2
         if (current_game_object->GetTag() == "indicator1") {
             current_game_object->SetPosition(glm::vec3(-2.6f, current_game_object->GetPosition()[1] + 5.5f, 0.0f));
 
+            // Depending on the player's current weapon, the current indicator will either be shown or hidden
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
             if (player->GetWeaponType() == 1) {
                 current_game_object->SetScale(0.5f);
@@ -642,6 +658,7 @@ void Game::Update(double delta_time)
         if (current_game_object->GetTag() == "indicator2") {
             current_game_object->SetPosition(glm::vec3(-2.6f, current_game_object->GetPosition()[1] + 5.5f, 0.0f));
 
+            // Depending on the player's current weapon, the current indicator will either be shown or hidden
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(game_objects_[0]);
             if (player->GetWeaponType() == 1) {
                 current_game_object->SetScale(0.0f);
@@ -660,20 +677,27 @@ void Game::Update(double delta_time)
         // Get the current game object
         GameObject* current_game_object = game_objects_[i];
 
+        // Check if the current object is out of bounds
         if (CheckOutOfBounds(current_game_object)) {
             printf("[X] Removed OOB object\n");
+            // If the object in question is the boss, then change the game state to "win"
             if (current_game_object->GetTag() == "planeboss") {
                 state = "win";
             }
+            // Remove the object
             game_objects_.erase(game_objects_.begin() + i);
         }
 
+        // Update player
         if (current_game_object->GetTag() == "player") {
             PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
 
+            // If the player won, stop them from moving
             if (state == "win") {
                 player->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
             }
+            // If the player's health is 0, make them "lose" and make them disappear
+            // We don't remove them though because we need to keep them on screen for the camera to stay on
             if (player->GetHealth() <= 0) {
                 state = "lose";
                 player->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -762,6 +786,7 @@ void Game::Update(double delta_time)
     for (int i = 0; i < bg_objects_.size(); i++) {
         GameObject* current_game_object = bg_objects_[i];
 
+        // Background objects have no logic, so we just render them without doing anything else
         current_game_object->Render(shader_);
     }
 
