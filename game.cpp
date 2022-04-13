@@ -178,7 +178,14 @@ void Game::MainLoop(void)
         // Set view to zoom out, centered by default at 0,0
         glm::mat4 window_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f / aspect_ratio, 1.0f, 1.0f));
         glm::mat4 camera_zoom = glm::scale(glm::mat4(1.0f), glm::vec3(cameraZoom, cameraZoom, cameraZoom));
-        camera_zoom = glm::translate(camera_zoom, -glm::vec3(0, player->GetPosition()[1]+2.0f, 0));
+
+        if (state == "win" || state == "lose") {
+            camera_zoom = glm::translate(camera_zoom, -glm::vec3(0, fg_objects_[0]->GetPosition()[1] + 0.8, 0));
+        }
+        else {
+            camera_zoom = glm::translate(camera_zoom, -glm::vec3(0, player->GetPosition()[1] + 2.0f, 0));
+        }
+
         glm::mat4 view_matrix = window_scale * camera_zoom;
         shader_.SetUniformMat4("view_matrix", view_matrix);
 
@@ -314,6 +321,26 @@ void Game::Controls(void)
     glm::vec3 curvel = player->GetVelocity();
     glm::vec3 newPos;
 
+    // debug tools
+    if (glfwGetKey(window_, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS) {
+        player->SetPosition(glm::vec3(0.0f, player->GetPosition()[1] - 1, 0.0f));
+        printf("[?] Moving player backwards...\n");
+    }
+    if (glfwGetKey(window_, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS) {
+        player->SetPosition(glm::vec3(0.0f, player->GetPosition()[1] + 1, 0.0f));
+        printf("[?] Moving player forwards...\n");
+    }
+    if (glfwGetKey(window_, GLFW_KEY_BACKSLASH) == GLFW_PRESS) {
+        player->addShieldTimer(60);
+        printf("[?] Giving player 60 seconds of invincibility...\n");
+    }
+
+    // if the player won or lost, skip the rest of these inputs
+    // basically, ignore player input
+    if (state == "win" || state == "lose") {
+        return;
+    }
+
     // Check for player input and make changes accordingly
     if (glfwGetKey(window_, GLFW_KEY_W) == GLFW_PRESS) {
         if (glm::length(curvel) < 3) {
@@ -375,16 +402,6 @@ void Game::Controls(void)
         }
         //switch wepond mode
     }
-
-    // debug tools
-    if (glfwGetKey(window_, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS) {
-        player->SetPosition(glm::vec3(0.0f, player->GetPosition()[1] - 1, 0.0f));
-        printf("[?] Moving player backwards...\n");
-    }
-    if (glfwGetKey(window_, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS) {
-        player->SetPosition(glm::vec3(0.0f, player->GetPosition()[1] + 1, 0.0f));
-        printf("[?] Moving player forwards...\n");
-    }
 }
 
 void Game::SpawnEnemies() {
@@ -392,13 +409,13 @@ void Game::SpawnEnemies() {
     if (glfwGetTime() > enemySpawnTimer_) {
         enemySpawnTimer_ += 2;
 
-        // if the player is fighting the boss, no other enemies should spawn
-        if (state == "boss") {
+        // if the player is fighting the boss or has won or lost the game, no other enemies should spawn
+        if (state == "boss" || state == "win" || state == "lose") {
             return;
         }
 
         // if the player enters the "boss area", prep the boss fight and change the game state to "boss"
-        if (game_objects_[0]->GetPosition()[1] > 440) {
+        if (game_objects_[0]->GetPosition()[1] > 440 && state == "game") {
             printf("[!] SPAWNED THE BOSS\n");
             state = "boss";
             GameObject* enemy = new GameObject(glm::vec3(0.0f, game_objects_[0]->GetPosition()[1] + 5.0f, 0.0f), tex_[11], size_, "planeboss");
@@ -451,6 +468,11 @@ void Game::SpawnPowerups() {
 
     if (glfwGetTime() > powerupSpawnTimer_) {
         powerupSpawnTimer_ += 8;
+
+        // if the player has won or lost the game, no more powerups should spawn
+        if (state == "win" || state == "lose") {
+            return;
+        }
 
         if ((rand() % 100 + 1) > 50) {
             game_objects_.push_back(new GameObject(glm::vec3(rand() % 5 - 1.5, game_objects_[0]->GetPosition()[1] + 8.0f, 0.0f), tex_[6], size_, "health"));
@@ -547,7 +569,11 @@ void Game::Update(double delta_time)
     for (int i = 0; i < fg_objects_.size(); i++) {
         GameObject* current_game_object = fg_objects_[i];
 
-        current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], game_objects_[0]->GetPosition()[1], 0.0f));
+        // if the player is in gameplay, the hud will follow them
+        // if the player won or lost, the hud stops (and hides) for the camera to focus on
+        if (state != "win" && state != "lose") {
+            current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], game_objects_[0]->GetPosition()[1], 0.0f));
+        }
 
         if (current_game_object->GetTag() == "title") {
             // if the game has "started", make the title slide off screen and then die
@@ -564,13 +590,23 @@ void Game::Update(double delta_time)
             
         }
         if (current_game_object->GetTag() == "hud_bar") {
-            current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 0.5, 0.0f));
+            if (state == "win") {
+                continue;
+            }
+            if (state != "lose") {
+                current_game_object->SetPosition(glm::vec3(current_game_object->GetPosition()[0], current_game_object->GetPosition()[1] + 0.5, 0.0f));
+            }
+            
         }
         if (current_game_object->GetTag() == "hud_arrow") {
-            current_game_object->SetPosition(glm::vec3((game_objects_[0]->GetPosition()[1] / 100) - 2.2, current_game_object->GetPosition()[1] - 1.2, 0.0f));
-
-            if (current_game_object->GetPosition()[0] > 2.2) {
-                current_game_object->SetPosition(glm::vec3(2.2, current_game_object->GetPosition()[1], 0.0f));
+            if (state == "win") {
+                continue;
+            }
+            if (state != "lose") {
+                current_game_object->SetPosition(glm::vec3((game_objects_[0]->GetPosition()[1] / 100) - 2.2, current_game_object->GetPosition()[1] - 1.2, 0.0f));
+                if (current_game_object->GetPosition()[0] > 2.2) {
+                    current_game_object->SetPosition(glm::vec3(2.2, current_game_object->GetPosition()[1], 0.0f));
+                }
             }
         }
 
@@ -585,7 +621,23 @@ void Game::Update(double delta_time)
 
         if (CheckOutOfBounds(current_game_object)) {
             printf("[X] Removed OOB object\n");
+            if (current_game_object->GetTag() == "planeboss") {
+                state = "win";
+            }
             game_objects_.erase(game_objects_.begin() + i);
+        }
+
+        if (current_game_object->GetTag() == "player") {
+            PlayerGameObject* player = dynamic_cast<PlayerGameObject*>(current_game_object);
+
+            if (state == "win") {
+                player->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (player->GetHealth() <= 0) {
+                state = "lose";
+                player->SetVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
+                player->SetScale(0.0f);
+            }
         }
 
         // Update enemy
